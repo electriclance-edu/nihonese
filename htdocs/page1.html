@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Lance C. Libatique">
+    <meta name="keywords" content="HTML, CSS, JavaScript">
+    <meta name="revised" content="6-01-2021">
+    <title>Reference Sheet - Nihonese</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style/common.css">
+    <link rel="stylesheet" href="../style/page1.css">
+    <script type="text/javascript" src="../script/characterData.js"></script>
+    <script type="text/javascript" src="../script/script.js"></script>
+  </head>
+  <body id="body" onload="onloadPage1()">
+    <div class="toolbar">
+      <a href="../index.html"><img src="../images/logo.png" alt="" id="logo"></a>
+      <div class="redirectParent" id="redirectParent">
+        <div class="redirect">
+          <a href="../index.html">Homepage</a>
+        </div>
+        <div class="selectedRedirect redirectMenuHoverer redirect">
+          <p>Reference Sheet</p>
+          <div class="redirectMenuParent">
+            <div class="redirect">
+              <a href="page1.html#pageTitle" class="">Introduction</a>
+            </div>
+            <div class="redirect">
+              <a href="page1.html#katakanaChartParent" class="">Katakana Chart</a>
+            </div>
+            <div class="redirect">
+              <a href="page1.html#hiraganaChartParent" class="">Hiragana Chart</a>
+            </div>
+          </div>
+        </div>
+        <div class="redirectMenuHoverer redirect">
+          <a href="../index.html#sectionThree">Exercises</a>
+          <div class="redirectMenuParent">
+            <div class="redirect">
+              <a href="page2.html" class="">Kana</a>
+            </div>
+            <div class="redirect">
+              <a href="page3.html" class="">Kanji</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sectionParent">
+      <div class="sectionOne">
+        <h1 id="pageTitle">writing reference</h1>
+        <div class="textParent">
+          <p class="smallText flash">Tip: You can hover over <span class='tooltipper'>underlined<span>下線付き</span></span> terms to see how to write them in Japanese!</p>
+          <p>Japan has three scripts for writing: <span class="tooltipper">Katakana<span>片仮名</span></span>, <span class="tooltipper">Hiragana<span>平仮名</span></span>, and <span class="tooltipper">Kanji<span>漢字</span></span>.</p>
+          <h2>Reading</h2>
+          <p>
+            Both <span class="tooltipper">Katakana<span>片仮名</span></span> and <span class="tooltipper">Hiragana<span>平仮名</span></span> are referred to as <span class="tooltipper">Kana<span>仮名</span></span>. They are syllabaries, meaning each of it's characters represent syllables, instead of singular sounds like the English alphabet. <br>
+            In this respect, <span class="tooltipper">Kanji<span>漢字</span></span> is pretty different from the <span class="tooltipper">Kana<span>仮名</span></span> as Kanji characters have two ways of being pronounced, called <span class="tooltipper">on-yomi<span>⾳読み</span></span> and <span class="tooltipper">kun-yomi<span>訓読み</span></span>. Kun-yomi is used when pronouncing a kanji that is written alone, while on-yomi is used for kanji that are compounded together. <br>
+            For example: stone, written with the kanji character 石, is read ishi. However, the word Gemstone, written with the characters for treasure and stone, (宝石) is read houseki.
+            The character 石 was read in two ways, it's kun-yomi "ishi" and it's on-yomi "seki".
+          </p>
+
+          <h2>Writing</h2>
+          <p>
+            <span class="tooltipper">Kanji<span>漢字</span></span> are simply Chinese symbols borrowed by Japan long ago for writing purposes. Kanji is used to write things from nouns to verbs to really, anything. Sometimes, Kanji are combined to form new words, such as the kanji for electricity (電) and car (車) being combined to make train (電車). Names are also usually written with kanji, meaning a name in Japan can mean things like <span class="tooltipper">Blessing<span>恵 (Kei)</span></span> or <span class="tooltipper">Fragrance<span>香 (Kaori)</span></span>. How nice!<br> <br>
+          </p>
+          <p>
+            <span class="tooltipper">Katakana<span>片仮名</span></span> and <span class="tooltipper">Hiragana<span>平仮名</span></span> symbols are derived from <span class="tooltipper">Kanji<span>漢字</span></span>, Katakana being a simplified version of Kanji and Hiragana being a cursive version of Kanji.
+            Hiragana is more used in grammatical purposes, such as in particles (similar to the is's and to's of English) or in spelling out Japanese words.
+            <br> Meanwhile, Katakana is used when spelling out loanwords, since there is no Kanji to represent them. For example, you would write restaurant as レストラン (read resutoran)
+            <br> <br>
+            Now, there is actually a sort of "fourth" script for Japanese called romaji, using the English alphabet to describe how to read a word. There are many examples of it on this webpage alone, like ishi, seki, den, and resutoran.
+            <br> <br>
+            If each of the four scripts still seem a bit ambiguous, here's an example of the four used to write a few words. The highlighted one means that would be the proper/more common one to use.
+            <br> <br>
+          </p>
+          <table>
+            <tr class="bold">
+              <th>Katakana</th>
+              <th>Hiragana</th>
+              <th>Kanji</th>
+              <th>Romaji</th>
+              <th>Meaning</th>
+            </tr>
+            <tr>
+              <td>ヒト</td>
+              <td>ひと</td>
+              <td class="highlight">人</td>
+              <td>hito</td>
+              <td>person</td>
+            </tr>
+            <tr>
+              <td class="highlight">フライドポテト</td>
+              <td>ふらいどぽてと</td>
+              <td></td>
+              <td>furaido poteto</td>
+              <td>french fries</td>
+            </tr>
+            <tr>
+              <td>オイシイ</td>
+              <td class="highlight">おいしい</td>
+              <td>美味しい</td>
+              <td>oishii</td>
+              <td>delicious</td>
+            </tr>
+            <tr>
+              <td>フジサン</td>
+              <td>ふじさん</td>
+              <td class="highlight">富士山</td>
+              <td>fujisan</td>
+              <td>Mount Fuji</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="sectionTwo">
+        <div class="textParent">
+          <div class="centerer">
+            <h2>Katakana Chart</h2>
+            <p class="smallText">Click on a character to highlight it!</p>
+            <p class="characterDisplay" id="katakanaCharacterDisplay"></p>
+            <h2 class="characterSyllable" id="katakanaCharacterSyllable"></h2>
+            <p class="characterNote" id="katakanaCharacterNote"></p>
+          </div>
+        </div>
+        <div class="chartParent" id="katakanaChartParent">
+        </div>
+      </div>
+      <div class="sectionThree">
+        <div class="chartParent" id="hiraganaChartParent">
+        </div>
+        <div class="textParent">
+          <div class="centerer">
+            <h2>Hiragana Chart</h2>
+            <p class="smallText">Click on a character to highlight it!</p>
+            <p class="characterDisplay" id="hiraganaCharacterDisplay"></p>
+            <h2 class="characterSyllable" id="hiraganaCharacterSyllable"></h2>
+            <p class="characterNote" id="hiraganaCharacterNote"></p>
+          </div>
+        </div>
+      </div>
+      <div class="referenceSection">
+        <hr>
+        <p class="smallText">DISCLAIMER: This website was made by a non-native learner of Japanese and as such may get things wrong. Take everything with a grain of salt, as you'd do on the <i>debatably trustworthy</i> world wide web!</p>
+        <div class="referenceContainer">
+          <p>Japanese References</p>
+          <ul>
+            <li>Kim, T. (2002). A Guide to Japanese Grammar: A Japanese Approach to Learning Japanese Grammar.</li>
+            <li>https://www.lexilogos.com/keyboard/japanese.php#</li>
+            <li>https://context.reverso.net/%E7%BF%BB%E8%A8%B3/%E6%97%A5%E6%9C%AC%E8%AA%9E-%E8%8B%B1%E8%AA%9E/%E4%B8%8B%E7%B7%9A%E4%BB%98%E3%81%8D</li>
+            <li>https://en.bab.la/dictionary/english-japanese/fried-potato</li>
+            <li>http://selftaughtjapanese.com/2015/11/16/japanese-word-nuances-%E7%BE%8E%E5%91%B3%E3%81%97%E3%81%84-oishii-vs-%E7%BE%8E%E5%91%B3%E3%81%84-umai-used-to-describe-food/ (Kanji of Oishii)</li>
+            <li>https://www.lingual-ninja.com/2018/09/how-to-say-delicious-in-japanese.html#:~:text=If%20we%20write%20Oishii%20in,meaning%20of%20%22beautiful%20taste%22 (Confirmation for the Kanji of Oishii)</li>
+            <li>https://www.verywellfamily.com/most-popular-japanese-baby-names-2028078 (Common Japanese Names)</li>
+            <li>https://www.youtube.com/watch?v=PS0svLNkrb8 (Pronunciation Tip: How to pronounce the Japanese 'R' - by Living Language)</li>
+            <li>https://en.wikipedia.org/wiki/Katakana (Reference for Katakana Chart)</li>
+            <li>https://en.wikipedia.org/wiki/Hiragana (Reference for Hiragana Chart)</li>
+            <li>https://aminoapps.com/c/japaneseschool/page/blog/hiragana-and-katakana-charts/mo8e_JpJskuRl58BvBMJY7Kkp0xwgnGgr8p (Confirmation for how to write the kana)</li>
+            <li>https://jpf.org.au/classroom-resources/resources/hiragana-katakana-game/ (Extra confirmation for how to write the kana)</li>
+          </ul>
+        </div>
+        <div class="me">
+          <p>Made by <span class="rainbowText">Lance C. Libatique</span> of 9 - Sodium for CS3</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

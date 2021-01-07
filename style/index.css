@@ -1,0 +1,184 @@
+/*
+Homepage
+*/
+.sectionOne {
+  position:relative;
+  height:calc(100vh - 50px);
+  margin-bottom:50px;
+}
+.sectionOne .textParent {
+  width:60%;
+  height:100%;
+  position:relative;
+}
+.sectionOne .textParent .centerer {
+  padding-top:5px;
+  padding-left:15px;
+  padding-right:15px;
+  padding-bottom:15px;
+  border-radius:15px;
+  background-color:white;
+}
+.sectionOne .textParent .centerer * {
+  animation:fadeIn 0.5s;
+}
+.sectionOne .imageParent {
+  width:40%;
+  height:100%;
+  position:absolute;
+  right:0;
+  top:0;
+  z-index:-100;
+}
+.sectionOne .imageParent img {
+  height:100vh;
+  right:0;
+  position:absolute;
+  top:20%;
+}
+.sectionTwoPointFive {
+  height:calc(100vh - 50px);
+  position:relative;
+}
+.sectionTwoPointFive .clickable {
+  width:50%;
+  min-width:300px;
+  border-top:1px solid rgb(200,200,200);
+  padding:10px;
+  z-index:100;
+}
+.sectionTwoPointFive div:hover {
+  margin-top:0;
+}
+.triangle {
+  width:0;
+  height:0;
+  border-left:10px solid black;
+  border-top:10px solid transparent;
+  border-bottom:10px solid transparent;
+  border-right:10px solid transparent;
+  position:absolute;
+}
+.bgBlue {
+  border-left-color:rgb(65,190,230);
+  border-width:50px;
+  top:70%;
+  left:30%;
+  animation:30s linear rotate infinite;
+  transform-origin:12.5px 50%;
+}
+.bgRed {
+  border-left-color:rgb(245,0,90);
+  border-width:40px;
+  top:25%;
+  left:60%;
+  animation:50s linear rotate infinite;
+  transform-origin:10px 50%;
+}
+.bgYellow {
+  border-left-color:rgb(255,220,0);
+  border-width:60px;
+  top:75%;
+  left:80%;
+  animation:20s linear rotate infinite;
+  transform-origin:15px 50%;
+}
+.bgGreen   {
+  border-left-color:rgb(65,185,85);
+  border-width:30px;
+  top:10%;
+  left:20%;
+  animation:10s linear rotate infinite;
+  transform-origin:7.5px 50%;
+}
+.sectionTwo {
+  height:calc(100vh - 50px);
+  position:relative;
+}
+.sectionTwo .imageParent {
+  left:0;
+  top:0;
+  width:50%;
+  height:100%;
+  position:absolute;
+}
+.sectionTwo .imageParent img {
+  height:70vh;
+}
+.sectionTwo .clickable {
+  position:absolute;
+  width:75%;
+  left:50%;
+  transform:translatex(-50%);
+}
+.sectionTwo .imageParent .centerer:hover .clickable {
+  margin-top:-10px;
+}
+.sectionTwo .textParent {
+  height:100%;
+  width:50%;
+  right:0;
+  top:0;
+  position:absolute;
+}
+.sectionTwo .textParent h2 {
+  text-align:center;
+}
+.sectionThree {
+  position:relative;
+  padding-bottom:100px;
+}
+.sectionThree .headerContainer {
+  width:100%;
+  height:20vh;
+  position:relative;
+  text-align:center;
+}
+.sectionThree .exerciseContainer {
+  width:100%;
+  text-align:center;
+}
+.exercise {
+  min-width:130px;
+  max-width:175px;
+  width:100%;
+  min-height:350px;
+  max-height:400px;
+  height:100%;
+  margin-left:10px;
+  display:inline-block;
+  position:relative;
+  white-space:normal;
+  transition:0.2s;
+}
+.exercise:hover {
+  margin-bottom:5px;
+}
+.exercise .icon {
+  width:128px;
+  height:128px;
+  background-image:url("../images/exerciseIcon.png");
+  position:relative;
+  background-size:contain;
+  color:white;
+}
+.exercise .icon p {
+  position:relative;
+  top:50px;
+  right:5px;
+  font-size:30px;
+  line-height:30px;
+}
+.exerciseKana .icon {
+  background-image:url("../images/kanaIcon.png");
+}
+.exerciseKanji .icon {
+  background-image:url("../images/kanjiIcon.png");
+}
+@keyframes rotate {
+  from {
+    transform:skewx(10deg) rotate(0deg);
+  } to {
+    transform:skewx(10deg) rotate(360deg);
+  }
+}

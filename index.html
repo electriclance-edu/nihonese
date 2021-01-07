@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Lance C. Libatique">
+    <meta name="keywords" content="HTML, CSS, JavaScript, Japanese, Guide">
+    <meta name="revised" content="6-01-2021">
+    <title>Nihonese</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style/common.css">
+    <link rel="stylesheet" href="style/index.css">
+    <script type="text/javascript" src="script/script.js"></script>
+  </head>
+  <body onload="onloadHomepage()" id="body">
+    <div class="toolbar">
+      <a href="index.html"><img src="images/logo.png" alt="" id="logo"></a>
+      <div class="redirectParent" id="redirectParent">
+        <div class="selectedRedirect redirect">
+          <p>Homepage</p>
+        </div>
+        <div class="redirectMenuHoverer redirect">
+          <a href="htdocs/page1.html">Reference Sheet</a>
+          <div class="redirectMenuParent">
+            <div class="redirect">
+              <a href="htdocs/page1.html#pageTitle" class="">Introduction</a>
+            </div>
+            <div class="redirect">
+              <a href="htdocs/page1.html#katakanaChartParent" class="">Katakana Chart</a>
+            </div>
+            <div class="redirect">
+              <a href="htdocs/page1.html#hiraganaChartParent" class="">Hiragana Chart</a>
+            </div>
+          </div>
+        </div>
+        <div class="redirectMenuHoverer redirect">
+          <a href="#sectionThree">Exercises</a>
+          <div class="redirectMenuParent">
+            <div class="redirect">
+              <a href="htdocs/page2.html" class="">Kana</a>
+            </div>
+            <div class="redirect">
+              <a href="htdocs/page3.html" class="">Kanji</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sectionParent">
+      <div class="sectionOne">
+        <div class="textParent">
+          <div class="centerer">
+            <h1 id="pageTitle">nihonese.</h1>
+            <p>a silly japanese learning tool</p>
+          </div>
+        </div>
+        <div class="imageParent">
+          <img src="images/woobler.png" alt="cloudImage" id="greenCloudImage">
+        </div>
+      </div>
+      <div class="sectionTwoPointFive">
+        <div class="centerer clickable">
+          <p>Nihonese is an informal japanese guide meant to help people learning Japanese. Start out your learning journey with the Reference Sheet for Hiragana and Katakana, or practice your writing and reading with the exercises!</p>
+          <br>
+          <p>If you need them, any used references are available at the bottom of each page.</p>
+          <br>
+          <p>Also, pretty please try out the exercises.</p>
+        </div>
+        <div class="triangle bgBlue"></div>
+        <div class="triangle bgRed"></div>
+        <div class="triangle bgYellow"></div>
+        <div class="triangle bgGreen"></div>
+      </div>
+      <div class="sectionTwo">
+        <div class="textParent">
+          <div class="centerer">
+            <h2>Writing Reference</h2>
+            <p>Start learning Japanese writing with a reference sheet for Katakana and Hiragana!</p>
+            <br>
+            <a href="htdocs/page1.html">
+              <div class="clickable">
+                <p>Go to the Reference Sheet</p>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="imageParent">
+          <div class="centerer">
+            <img src="images/wooblerTwo.png" alt="redCloudImage">
+          </div>
+        </div>
+      </div>
+      <div class="sectionThree" id="sectionThree">
+        <div class="headerContainer">
+          <div class="centerer">
+            <h2>Writing Exercises</h2>
+            <p>Practice your writing with exercises ranging from simple to not so very difficult!</p>
+            <br>
+            <p class="smallText">Click one below to go to their exercise page!</p>
+          </div>
+        </div>
+        <div class="exerciseContainer">
+          <a class="exercise exerciseKana clickable" href="htdocs/page2.html">
+            <div class="centerer">
+              <h2>Kana Exercises</h2>
+              <div class="icon">
+                <p>仮名</p>
+              </div>
+              <br>
+            </div>
+          </a>
+          <a class="exercise exerciseKanji clickable" href="htdocs/page3.html">
+            <div class="centerer">
+              <h2>Kanji Exercises</h2>
+              <div class="icon">
+                <p>漢字</p>
+              </div>
+              <br>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="referenceSection">
+        <hr>
+        <p class="smallText">DISCLAIMER: This website was made by a non-native learner of Japanese and as such may get things wrong. Take everything with a grain of salt, as you'd do on the <i>debatably trustworthy</i> world wide web!</p>
+        <div class="referenceContainer">
+          <p>Art References/Sources</p>
+          <ul>
+            <li>https://www.freepik.com/free-vector/business-landing-page_4468757.htm</li>
+            <li>https://www.freepik.com/free-vector/business-landing-page_4468757.htm</li>
+            <li>https://graphicmama.com/blog/website-color-schemes/</li>
+            <li>https://www.pngkit.com/downpic/u2q8y3o0i1t4o0e6_stack-of-books-vector-book-stack-book-icon/</li>
+          </ul>
+          <p>Japanese References</p>
+          <ul>
+            <li>https://www.lexilogos.com/keyboard/japanese.php#</li>
+          </ul>
+        </div>
+        <div class="me">
+          <p>Made by <span class="rainbowText">Lance C. Libatique</span> of 9 - Sodium for CS3</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

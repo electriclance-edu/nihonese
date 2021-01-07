@@ -1,0 +1,26 @@
+.sectionOne {
+  position:relative;
+  height:calc(100vh - 50px);
+  margin-bottom:50px;
+}
+.choice {
+  position:absolute;
+  left:50%;
+  transform:translatex(-50%);
+}
+.choice div {
+  width:100px;
+  height:50px;
+  display:inline-block;
+  color:black;
+  text-align:center;
+  text-decoration:none;
+  position:relative;
+  border-radius:10px;
+}
+.yes {
+  background-color:rgb(130,210,150);
+}
+.no {
+  background-color:rgb(250,90,145);
+}

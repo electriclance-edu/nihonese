@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Lance C. Libatique">
+    <meta name="keywords" content="HTML, CSS, JavaScript, Japanese, Guide">
+    <meta name="revised" content="10-11-2020">
+    <title>Nihonese - 404</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style/common.css">
+    <link rel="stylesheet" href="../style/404.css">
+    <script type="text/javascript" src="../script/script.js"></script>
+  </head>
+  <body onload="onload404()" id="body">
+    <div class="toolbar">
+      <a href="index.html"><img src="../images/logo.png" alt="" id="logo"></a>
+      <div class="redirectParent" id="redirectParent">
+        <div class="redirect">
+          <a href="index.html">Homepage</a>
+        </div>
+        <div class="redirectMenuHoverer redirect">
+          <a href="page1.html">Reference Sheet</a>
+          <div class="redirectMenuParent">
+            <div class="redirect">
+              <a href="page1.html#pageTitle" class="">Introduction</a>
+            </div>
+            <div class="redirect">
+              <a href="page1.html#katakanaChartParent" class="">Katakana Chart</a>
+            </div>
+            <div class="redirect">
+              <a href="page1.html#hiraganaChartParent" class="">Hiragana Chart</a>
+            </div>
+          </div>
+        </div>
+        <div class="redirectMenuHoverer redirect">
+          <a href="index.html#sectionThree">Exercises</a>
+          <div class="redirectMenuParent">
+            <div class="redirect">
+              <a href="page2.html" class="">Hiragana</a>
+            </div>
+            <div class="redirect">
+              <a href="page3.html" class="">Katakana</a>
+            </div>
+            <div class="redirect">
+              <a href="page4.html" class="">Kanji</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sectionOne">
+      <div class="centerer">
+        <h1 id="errorFace">:/</h1>
+        <p>This page is under construction!</p>
+        <p>Return to the homepage?</p>
+        <br>
+        <div class="choice">
+          <a href="index.html">
+            <div class="yes">
+              <p class='centerer'>Yop</p>
+            </div>
+          </a>
+          <div class="no" onclick="no()">
+            <p class='centerer'>Nop</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="referenceSection">
+      <hr>
+      <p class="smallText">DISCLAIMER: This website was made by a non-native learner of Japanese and as such may get things wrong. Take everything with a grain of salt, as you'd do on the <i>debatably trustworthy</i> world wide web!</p>
+      <div class="referenceContainer">
+        <p>Kaomoji Reference</p>
+        <ul>
+          <li>http://kaomoji.ru/en/</li>
+        </ul>
+      </div>
+      <div class="me">
+        <p>Made by <span class="rainbowText">Lance C. Libatique</span> of 9 - Sodium for CS3</p>
+      </div>
+    </div>
+  </body>
+</html>

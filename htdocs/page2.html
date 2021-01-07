@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="author" content="Lance C. Libatique">
+    <meta name="keywords" content="HTML, CSS, JavaScript, Japanese, Guide">
+    <meta name="revised" content="6-01-2021">
+    <title>Katakana Exercises - Nihonese</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style/common.css">
+    <link rel="stylesheet" href="../style/page2.css">
+    <script type="text/javascript" src="../script/characterData.js"></script>
+    <script type="text/javascript" src="../script/script.js"></script>
+  </head>
+  <body onload="onloadPage2()" id="body">
+    <div class="toolbar">
+      <a href="../index.html"><img src="../images/logo.png" alt="" id="logo"></a>
+      <div class="redirectParent" id="redirectParent">
+        <div class="redirect">
+          <a href="../index.html">Homepage</a>
+        </div>
+        <div class="redirectMenuHoverer redirect">
+          <a href="page1.html">Reference Sheet</a>
+          <div class="redirectMenuParent">
+            <div class="redirect">
+              <a href="page1.html#pageTitle" class="">Introduction</a>
+            </div>
+            <div class="redirect">
+              <a href="page1.html#katakanaChartParent" class="">Katakana Chart</a>
+            </div>
+            <div class="redirect">
+              <a href="page1.html#hiraganaChartParent" class="">Hiragana Chart</a>
+            </div>
+          </div>
+        </div>
+        <div class="selectedRedirect redirectMenuHoverer redirect">
+          <a href="../index.html#sectionThree">Exercises</a>
+          <div class="redirectMenuParent">
+            <div class="redirect">
+              <a href="page2.html" class="">Kana</a>
+            </div>
+            <div class="redirect">
+              <a href="page3.html" class="">Kanji</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sectionOne">
+      <div class="horizontalCenterer">
+        <h1 id="pageTitle">kana exercises</h1>
+        <div class="clickable beginExercise" onclick="KanaExercise.beginExercise()">
+          <h2>Start the exercise!</h2>
+          <div id="warnings">
+
+          </div>
+        </div> <br>
+        <div class="clickable clickableOption" onclick="KanaExercise.option(this)" id="japaneseTyping">
+          <p><span>Disable</span> exercises that require you to type in Japanese.</p>
+          <p><i>(click)</i></p>
+        </div>
+        <p class="underline" onclick="toggle('options')">Extra Options</p>
+        <div id="options"> <!--style="display:none"-->
+          <div class="exerciseSetup">
+            <p>Choose which types of problems will appear in the exercise.</p>
+            <div class="exerciseTypes">
+              <div class="clickable clickableOption" id="rapid" onclick="KanaExercise.problem(this)">
+                <h2>Rapid</h2>
+                <p>Match the prompt with the proper option.</p>
+              </div>
+              <div class="clickable clickableOption" id="translate" onclick="KanaExercise.problem(this)">
+                <h2>Write</h2>
+                <p>Write the given phrase in Romaji or Japanese.</p>
+              </div>
+              <div class="clickable clickableOption" id="word" onclick="KanaExercise.problem(this)">
+                <h2>Translate</h2>
+                <p>Translate a single word into English or Japanese.</p>
+              </div>
+              <div class="clickable clickableOption" style="border-top-color:rgb(255,115,15)" id="paragraph" onclick="KanaExercise.problem(this)">
+                <h2>Paragraph</h2>
+                <p>Translate an entire paragraph into Romaji.</p>
+              </div>
+            </div>
+            <p>Enable or disable certain exercise features.</p>
+            <div class="exerciseOptions">
+              <div class="clickableOption clickable" id="time" onclick="KanaExercise.option(this)">
+                <p><span>Disable</span> Time Limits</p>
+              </div>
+              <div class="clickableOption clickable" id="katakana" onclick="KanaExercise.option(this)">
+                <p><span>Disable</span> Katakana</p>
+              </div>
+              <div class="clickableOption clickable" id="hiragana" onclick="KanaExercise.option(this)">
+                <p><span>Disable</span> Hiragana</p>
+              </div>
+            </div>
+            <div id="exerciseRatiosParent">
+              <p>If you ran the exercise <span id="total">95</span> times, the amount of times each exercise that appeared would roughly be:</p>
+              <div class="exerciseRatios">
+                <div id="chanceRapid">
+                  <p>Rapid: </p> <input type="text" value="65"> <br>
+                </div>
+                <div id="chanceTranslate">
+                  <p>Translate: </p> <input type="text" value="15"> <br>
+                </div>
+                <div id="chanceParagraph" style="display:none;">
+                  <p>Paragraph: </p> <input type="text" value="15"> <br>
+                </div>
+                <div id="chanceWord">
+                  <p>Word: </p> <input type="text" value="15">
+                </div>
+                <p>(you can modify these)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

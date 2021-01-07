@@ -1,0 +1,62 @@
+body {
+  overflow-y:scroll;
+}
+.sectionOne {
+  min-height:calc(100vh - 50px);
+  position:relative;
+}
+* {
+  text-align:center;
+}
+.horizontalCenterer {
+  position:absolute;
+  left:50%;
+  top:50px;
+  transform:translatex(-50%);
+}
+.clickable {
+  position:relative;
+  top:0;
+  box-sizing:border-box;
+  color:rgb(100,100,100);
+  margin-top:10px;
+  overflow:hidden;
+}
+.beginExercise {
+  display:inline-block;
+  padding-left:10px;
+  padding-right:10px;
+  margin-bottom:50px;
+}
+.clickableOption {
+  border-top:2px solid rgb(115,255,15);
+  display:inline-block;
+  padding-left:10px;
+  padding-right:10px;
+}
+.clickable:hover {
+  top:-5px;
+  margin-top:10px;
+}
+.exerciseTypes,.exerciseOptions,.exerciseRatios {
+  margin-bottom:20px;
+  position:relative;
+}
+.exerciseTypes .clickable,.exerciseOptions .clickable {
+  width:calc(33% - 5px);
+  max-width:300px;
+  min-width:200px;
+}
+.exerciseOptions {
+  text-align:center;
+}
+.exerciseRatios p {
+  white-space:pre;
+}
+.exerciseRatios p,.exerciseRatios input {
+  display:inline-block;
+  margin-bottom:5px;
+}
+.exerciseRatios p:last-child {
+  display:block;
+}
