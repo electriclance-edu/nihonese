@@ -48,6 +48,24 @@ function no() {
   ]
   document.getElementById("errorFace").innerHTML = faces[randNum(faces.length - 1)];
 }
+function weightedRandom(probabilityArray) {
+  //taken from We Do It Better than Icarus Ever Could (basic script.js);
+  var max = 0;
+  var index;
+  for (var i = 0; i < probabilityArray.length; i++) {
+    max += parseInt(probabilityArray[i]);
+  }
+  var randomRoll = PlanetHandler.seededRandFloat(max);
+  //PlanetHandler.seededRandFloat is from Icarus, use a different rng if using for something else
+  var threshold = probabilityArray[0];
+  for (var index = 0; index < probabilityArray.length; index++) {
+    if (randomRoll < threshold) {
+      return index;
+    } else {
+      threshold += probabilityArray[index + 1];
+    }
+  }
+}
 function typewrite(string,element,speed = 75,preserveWidth = false,specials) {
   if (preserveWidth) {
     element.style.width = element.clientWidth + "px";
@@ -331,11 +349,11 @@ class KanaExercise {
     if (this.options[type].enabled) {
       this.options[type].enabled = false;
       ratioCounterpart.style.display = "none";
-      element.style.borderTopColor = "rgb(255,115,15)";
+      element.className = "clickable clickableOption unchosen";
     } else {
       this.options[type].enabled = true;
       ratioCounterpart.style.display = "block";
-      element.style.borderTopColor = "rgb(115,255,15)";
+      element.className = "clickable clickableOption";
     }
     KanaExercise.updatePercentage(ratioCounterpart.children[1]);
   }
@@ -343,12 +361,12 @@ class KanaExercise {
     var type = element.id;
     if (this.options[type]) {
       this.options[type] = false;
-      element.children[0].children[0].innerHTML = "Enable";
-      element.style.borderTopColor = "rgb(255,115,15)";
+      element.children[1].children[0].innerHTML = "Enable";
+      element.className = "clickable clickableOption unchosen";
     } else {
       this.options[type] = true;
-      element.children[0].children[0].innerHTML = "Disable";
-      element.style.borderTopColor = "rgb(115,255,15)";
+      element.children[1].children[0].innerHTML = "Disable";
+      element.className = "clickable clickableOption";
     }
   }
   static updatePercentage(element) {
@@ -378,6 +396,12 @@ class KanaExercise {
       document.getElementById("exerciseRatiosParent").style.display = "block";
     }
   }
+  static warning(text) {
+    var warningElement = document.createElement("p");
+    warningElement.className = "warning";
+    warningElement.innerHTML = text;
+    document.getElementById("warnings").appendChild(warningElement);
+  }
   static beginExercise() {
     //validate if options are good to start
     document.getElementById("warnings").innerHTML = "";
@@ -393,13 +417,10 @@ class KanaExercise {
       KanaExercise.warning("Cannot start when problem type chances are invalid.")
     }
   }
-  static warning(text) {
-    var warningElement = document.createElement("p");
-    warningElement.className = "warning";
-    warningElement.innerHTML = text;
-    document.getElementById("warnings").appendChild(warningElement);
+  static randomProblem() {
+
   }
   static rapid() {
-    
+
   }
 }

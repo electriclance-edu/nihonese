@@ -46,7 +46,7 @@
         </div>
       </div>
     </div>
-    <div class="sectionOne">
+    <div class="sectionOne" id="sectionOne">
       <div class="horizontalCenterer">
         <h1 id="pageTitle">kana exercises</h1>
         <div class="clickable beginExercise" onclick="KanaExercise.beginExercise()">
@@ -56,8 +56,9 @@
           </div>
         </div> <br>
         <div class="clickable clickableOption" onclick="KanaExercise.option(this)" id="japaneseTyping">
+          <div class="circle"></div>
           <p><span>Disable</span> exercises that require you to type in Japanese.</p>
-          <p><i>(click)</i></p>
+          <p><i>(this is clickable)</i></p>
         </div>
         <p class="underline" onclick="toggle('options')">Extra Options</p>
         <div id="options"> <!--style="display:none"-->
@@ -65,18 +66,22 @@
             <p>Choose which types of problems will appear in the exercise.</p>
             <div class="exerciseTypes">
               <div class="clickable clickableOption" id="rapid" onclick="KanaExercise.problem(this)">
+                <div class="circle"></div>
                 <h2>Rapid</h2>
                 <p>Match the prompt with the proper option.</p>
               </div>
               <div class="clickable clickableOption" id="translate" onclick="KanaExercise.problem(this)">
+                <div class="circle"></div>
                 <h2>Write</h2>
                 <p>Write the given phrase in Romaji or Japanese.</p>
               </div>
               <div class="clickable clickableOption" id="word" onclick="KanaExercise.problem(this)">
+                <div class="circle"></div>
                 <h2>Translate</h2>
                 <p>Translate a single word into English or Japanese.</p>
               </div>
-              <div class="clickable clickableOption" style="border-top-color:rgb(255,115,15)" id="paragraph" onclick="KanaExercise.problem(this)">
+              <div class="clickable clickableOption unchosen" id="paragraph" onclick="KanaExercise.problem(this)">
+                <div class="circle"></div>
                 <h2>Paragraph</h2>
                 <p>Translate an entire paragraph into Romaji.</p>
               </div>
@@ -84,29 +89,32 @@
             <p>Enable or disable certain exercise features.</p>
             <div class="exerciseOptions">
               <div class="clickableOption clickable" id="time" onclick="KanaExercise.option(this)">
+                <div class="circle"></div>
                 <p><span>Disable</span> Time Limits</p>
               </div>
               <div class="clickableOption clickable" id="katakana" onclick="KanaExercise.option(this)">
+                <div class="circle"></div>
                 <p><span>Disable</span> Katakana</p>
               </div>
               <div class="clickableOption clickable" id="hiragana" onclick="KanaExercise.option(this)">
+                <div class="circle"></div>
                 <p><span>Disable</span> Hiragana</p>
               </div>
             </div>
             <div id="exerciseRatiosParent">
-              <p>If you ran the exercise <span id="total">95</span> times, the amount of times each exercise that appeared would roughly be:</p>
+              <p>If you ran the exercise <span id="total">95</span> times, the amount of times each exercise that appeared would roughly be:</h2>
               <div class="exerciseRatios">
                 <div id="chanceRapid">
-                  <p>Rapid: </p> <input type="text" value="65"> <br>
+                  <h2>Rapid: </h2> <input type="text" value="65"> <br>
                 </div>
                 <div id="chanceTranslate">
-                  <p>Translate: </p> <input type="text" value="15"> <br>
+                  <h2>Translate: </h2> <input type="text" value="15"> <br>
                 </div>
                 <div id="chanceParagraph" style="display:none;">
-                  <p>Paragraph: </p> <input type="text" value="15"> <br>
+                  <h2>Paragraph: </h2> <input type="text" value="15"> <br>
                 </div>
                 <div id="chanceWord">
-                  <p>Word: </p> <input type="text" value="15">
+                  <h2>Word: </h2> <input type="text" value="15">
                 </div>
                 <p>(you can modify these)</p>
               </div>
@@ -114,6 +122,9 @@
           </div>
         </div>
       </div>
+    </div>
+    <div id="">
+
     </div>
   </body>
 </html>
