@@ -412,15 +412,24 @@ class KanaExercise {
     }
     if (!this.options.rapid.enabled && !this.options.translate.enabled && !this.options.word.enabled && !this.options.paragraph.enabled) {
       KanaExercise.warning("Cannot start when all problem types are disabled.")
+      canStart = false;
     }
     if (this.options.rapid.chance == "invalid" && this.options.rapid.enabled || this.options.translate.chance == "invalid" && this.options.translate.enabled || this.options.word.chance == "invalid" && this.options.word.enabled  || this.options.paragraph.chance == "invalid" && this.options.paragraph.enabled) {
       KanaExercise.warning("Cannot start when problem type chances are invalid.")
+      canStart = false;
+    }
+    if (canStart) {
+      document.getElementById("sectionOne").style.opacity = "0";
+      document.getElementById("body").style.overflowY = "hidden";
+      document.getElementById("problemParent").style.opacity = "1";
+      document.getElementById("problemParent").style.pointerEvents = "all";
     }
   }
   static randomProblem() {
+    //check which problems are available
 
   }
-  static rapid() {
+  static rapid(hiragana = true, katakana = true) {
 
   }
 }
