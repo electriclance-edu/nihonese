@@ -18,7 +18,6 @@ function onloadPage2() {
   processWords();
   document.addEventListener("keypress", function(event) {
     if (parseInt(event.key) < 6 && Exercise.currentProblem.type == "rapid") {
-      console.log(event.key);
       document.getElementById("rapidExercise").children[document.getElementById("rapidExercise").children.length - 1].children[event.key - 1].click();
     }
   });
@@ -337,10 +336,9 @@ class Exercise {
       hiragana:true,
       katakana:true,
       japaneseTyping:true,
-      rapid:{type:"rapid",enabled:true,chance:65},
-      translate:{type:"translate",enabled:true,chance:15},
-      word:{type:"word",enabled:true,chance:15},
-      paragraph:{type:"paragraph",enabled:false,chance:5},
+      rapid:{type:"rapid",enabled:true,chance:85},
+      translate:{type:"translate",enabled:false,chance:15},
+      write:{type:"write",enabled:true,chance:15}
     }
     this.characterList = [[...characterData.katakana],[...characterData.hiragana]];
     for (var i = 0; i < 2; i++) {
@@ -395,7 +393,7 @@ class Exercise {
     }
     element.style.backgroundColor = "";
     this.options[element.parentElement.id.substring(6).toLowerCase()].chance = element.value;
-    var problemTypes = ["rapid","translate","word","paragraph"];
+    var problemTypes = ["rapid","translate","write"];
     var total = 0;
     var totalBlank = 0;
     var problemType;
@@ -428,11 +426,11 @@ class Exercise {
       Exercise.warning("Cannot start without any kana enabled.");
       canStart = false;
     }
-    if (!this.options.rapid.enabled && !this.options.translate.enabled && !this.options.word.enabled && !this.options.paragraph.enabled) {
+    if (!this.options.rapid.enabled && !this.options.translate.enabled && !this.options.write.enabled) {
       Exercise.warning("Cannot start when all problem types are disabled.")
       canStart = false;
     }
-    if (this.options.rapid.chance == "invalid" && this.options.rapid.enabled || this.options.translate.chance == "invalid" && this.options.translate.enabled || this.options.word.chance == "invalid" && this.options.word.enabled  || this.options.paragraph.chance == "invalid" && this.options.paragraph.enabled) {
+    if (this.options.rapid.chance == "invalid" && this.options.rapid.enabled || this.options.translate.chance == "invalid" && this.options.translate.enabled || this.options.write.chance == "invalid" && this.options.write.enabled) {
       Exercise.warning("Cannot start when problem type chances are invalid.")
       canStart = false;
     }
@@ -455,13 +453,12 @@ class Exercise {
     for (var i = optionKeys.length - 5; i < optionKeys.length; i++) {
       var problem = this.options[optionKeys[i]];
       if (problem.enabled) {
-        probabilityArray.push(problem.chance);
+        probabilityArray.push(parseInt(problem.chance));
         problems.push(problem);
       }
     }
     this.currentProblem = problems[weightedRandom(probabilityArray)];
-    //Exercise[this.currentProblem.type]();
-    Exercise["word"]();
+    Exercise[this.currentProblem.type]();
   }
   static validate(answer) {
     if (answer == this.correctAnswer) {
@@ -523,11 +520,6 @@ class Exercise {
     for (var i = 1; i < choices.length; i++) {
       characterIndex = randNum(choosable.length - 1);
       randomChoices.push(choosable[characterIndex][characterType]);
-      if (randomChoices[randomChoices.length - 1] == "") {
-        console.log(
-        choosable.splice(characterIndex,1))
-        console.log(characterIndex);
-      }
     }
     for (var i = 0; i < choices.length; i++) {
       var index = randNum(randomChoices.length - 1);
@@ -536,7 +528,15 @@ class Exercise {
     };
 
   }
-  static word() {
-    
+  static write() {
+    //generate a random sentence then user will have to input romaji
+    //preferrably, while the user is typing, check green which ones were finished typed, and check yellow the word that the player is currently on
+    //after done, show which words were detected as mistakes
+    console.log("write");
+    this.rapid();
+  }
+  static translate() {
+    console.log("translate");
+    this.rapid;
   }
 }

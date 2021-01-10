@@ -70,20 +70,15 @@
                 <h2>Rapid</h2>
                 <p>Match the prompt with the proper option.</p>
               </div>
-              <div class="clickable clickableOption" id="translate" onclick="Exercise.problem(this)">
+              <div class="clickable clickableOption" id="write" onclick="Exercise.problem(this)">
                 <div class="circle"></div>
                 <h2>Write</h2>
                 <p>Write the given phrase in Romaji.</p>
               </div>
-              <div class="clickable clickableOption" id="word" onclick="Exercise.problem(this)">
+              <div class="clickable clickableOption unchosen" id="translate" onclick="Exercise.problem(this)">
                 <div class="circle"></div>
                 <h2>Translate</h2>
                 <p>Translate a single word into English or Japanese.</p>
-              </div>
-              <div class="clickable clickableOption unchosen" id="paragraph" onclick="Exercise.problem(this)">
-                <div class="circle"></div>
-                <h2>Paragraph</h2>
-                <p>Translate an entire paragraph into Romaji.</p>
               </div>
             </div>
             <p>Enable or disable certain exercise features.</p>
@@ -107,14 +102,11 @@
                 <div id="chanceRapid">
                   <h2>Rapid: </h2> <input type="text" value="65"> <br>
                 </div>
-                <div id="chanceTranslate">
+                <div id="chanceTranslate" style="display:none;">
                   <h2>Translate: </h2> <input type="text" value="15"> <br>
                 </div>
-                <div id="chanceParagraph" style="display:none;">
-                  <h2>Paragraph: </h2> <input type="text" value="15"> <br>
-                </div>
-                <div id="chanceWord">
-                  <h2>Word: </h2> <input type="text" value="15">
+                <div id="chanceWrite">
+                  <h2>Write: </h2> <input type="text" value="15">
                 </div>
                 <p>(you can modify these)</p>
               </div>
@@ -147,6 +139,9 @@
             <p>loading...</p>
           </div>
         </div>
+      </div>
+      <div id="wordProblem" class="centerer">
+
       </div>
     </div>
   </body>
