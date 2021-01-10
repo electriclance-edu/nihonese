@@ -55,8 +55,7 @@ function weightedRandom(probabilityArray) {
   for (var i = 0; i < probabilityArray.length; i++) {
     max += parseInt(probabilityArray[i]);
   }
-  var randomRoll = PlanetHandler.seededRandFloat(max);
-  //PlanetHandler.seededRandFloat is from Icarus, use a different rng if using for something else
+  var randomRoll = randNumFloat(max);
   var threshold = probabilityArray[0];
   for (var index = 0; index < probabilityArray.length; index++) {
     if (randomRoll < threshold) {
@@ -112,10 +111,12 @@ function typewrite(string,element,speed = 75,preserveWidth = false,specials) {
 function detectScroll() {
   var body = document.getElementById("body");
   var y = body.scrollTop;
-  console.log(y + "px");
 }
 function randNum(max) {
   return Math.round(Math.random() * max);
+}
+function randNumFloat(max) {
+  return Math.random() * max;
 }
 function processWords() {
   var arrayWordList = rawWordList.split("\n");
@@ -293,7 +294,6 @@ class Table {
     for (var i = 0; i < dataArray.length; i++) {
       var testSyllable = Table.getSyllableWithSymbol(symbol,dataArray[i]);
       if (testSyllable != undefined) {
-        console.log("found");
         syllableObject = testSyllable;
         break;
       }
@@ -331,11 +331,23 @@ class KanaExercise {
       hiragana:true,
       katakana:true,
       japaneseTyping:true,
-      rapid:{enabled:true,chance:65},
-      translate:{enabled:true,chance:15},
-      word:{enabled:true,chance:15},
-      paragraph:{enabled:false,chance:5},
+      rapid:{type:"rapid",enabled:true,chance:65},
+      translate:{type:"translate",enabled:true,chance:15},
+      word:{type:"word",enabled:true,chance:15},
+      paragraph:{type:"paragraph",enabled:false,chance:5},
     }
+    this.characterList = [[...characterData.katakana],[...characterData.hiragana]];
+    for (var i = 0; i < 2; i++) {
+      for (var j = 0; j < this.characterList[i].length; j++) {
+        for (var k = 0; k < this.characterList[i][j].length; k++) {
+          if (this.characterList[i][j][k][1] == "" || this.characterList[i][j][k][2] == "SKIP") {
+            this.characterList[i][j].splice(k,1);
+            k--;
+          }
+        }
+      }
+    }
+    this.wordList = [...wordList];
     var ratios = document.getElementsByTagName("input");
     for (var i = 0; i < ratios.length; i++) {
       ratios[i].addEventListener("input", function (e) {
@@ -419,17 +431,103 @@ class KanaExercise {
       canStart = false;
     }
     if (canStart) {
+      this.answers = [];
+      setTimeout(function() {
+        document.getElementById("sectionOne").style.display = "none";
+      },1000);
       document.getElementById("sectionOne").style.opacity = "0";
       document.getElementById("body").style.overflowY = "hidden";
       document.getElementById("problemParent").style.opacity = "1";
       document.getElementById("problemParent").style.pointerEvents = "all";
+      this.randomProblem();
     }
   }
   static randomProblem() {
-    //check which problems are available
-
+    var problems = [];
+    var probabilityArray = [];
+    var optionKeys = Object.keys(this.options);
+    for (var i = optionKeys.length - 5; i < optionKeys.length; i++) {
+      var problem = this.options[optionKeys[i]];
+      if (problem.enabled) {
+        probabilityArray.push(problem.chance);
+        problems.push(problem);
+      }
+    }
+    this.currentProblem = problems[weightedRandom(probabilityArray)];
+    //KanaExercise[this.currentProblem.type]();
+    KanaExercise["rapid"]();
   }
-  static rapid(hiragana = true, katakana = true) {
+  static validate(answer) {
+    if (answer == this.correctAnswer) {
+      clearTimeout(this.timeout);
+      document.getElementById("problemParent").style.backgroundColor = "rgba(115,255,15,0.3)";
+      this.answers.push({
+        correct:true,
+        answered:answer,
+        correct:this.correctAnswer,
+        problemType:this.currentProblem
+      });
+      this.randomProblem();
+    } else {
+      clearTimeout(this.timeout);
+      document.getElementById("problemParent").style.backgroundColor = "rgba(255,60,60,0.3)";
+      this.answers.push({
+        correct:false,
+        answered:answer,
+        correct:this.correctAnswer,
+        problemType:this.currentProblem
+      });
+      this.randomProblem();
+    }
+    this.timeout = setTimeout(function(){
+      document.getElementById("problemParent").style.backgroundColor = "";
+    },300);
+  }
+  static rapid() {
+    var randomCharacter = this.characterList;
+    if (!this.options.hiragana) {
+      var kanaIndex = 0;
+    } else if (!this.options.katakana) {
+      var kanaIndex = 1;
+    } else {
+      var kanaIndex = randNum(randomCharacter.length - 1);
+    }
+
+    randomCharacter = randomCharacter[kanaIndex];
+    var familyIndex = randNum(randomCharacter.length - 1);
+    randomCharacter = randomCharacter[familyIndex];
+    var characterIndex = randNum(randomCharacter.length - 1);
+    var choosable = [...this.characterList[kanaIndex][familyIndex]];
+    var characterType = randNum(1);
+    randomCharacter = randomCharacter[characterIndex];
+    document.getElementById("rapidCharacter").innerHTML = randomCharacter[characterType];
+
+    if (characterType == 1) {
+      characterType = 0;
+    } else {
+      characterType = 1;
+    }
+
+    this.correctAnswer = randomCharacter[characterType];
+    choosable.splice(characterIndex,1);
+
+    var choices = document.getElementById("rapidExercise").children;
+    var randomChoices = [this.correctAnswer];
+    choices = choices[choices.length - 1].children;
+    for (var i = 1; i < choices.length; i++) {
+      characterIndex = randNum(choosable.length - 1);
+      randomChoices.push(choosable[characterIndex][characterType]);
+      if (randomChoices[randomChoices.length - 1] == "") {
+        console.log(
+        choosable.splice(characterIndex,1))
+        console.log(characterIndex);
+      }
+    }
+    for (var i = 0; i < choices.length; i++) {
+      var index = randNum(randomChoices.length - 1);
+      choices[i].children[0].innerHTML = randomChoices[index];
+      randomChoices.splice(index,1);
+    };
 
   }
 }
