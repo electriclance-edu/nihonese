@@ -14,8 +14,14 @@ function onloadPage1() {
 }
 function onloadPage2() {
   onload();
-  KanaExercise.initialize();
+  Exercise.initialize();
   processWords();
+  document.addEventListener("keypress", function(event) {
+    if (parseInt(event.key) < 6 && Exercise.currentProblem.type == "rapid") {
+      console.log(event.key);
+      document.getElementById("rapidExercise").children[document.getElementById("rapidExercise").children.length - 1].children[event.key - 1].click();
+    }
+  });
 }
 function onloadPage3() {
   onload();
@@ -324,7 +330,7 @@ class SyllableObject {
     this.note = note;
   }
 }
-class KanaExercise {
+class Exercise {
   static initialize() {
     this.options = {
       time:true,
@@ -351,7 +357,7 @@ class KanaExercise {
     var ratios = document.getElementsByTagName("input");
     for (var i = 0; i < ratios.length; i++) {
       ratios[i].addEventListener("input", function (e) {
-        KanaExercise.updatePercentage(this);
+        Exercise.updatePercentage(this);
       });
     }
   }
@@ -367,7 +373,7 @@ class KanaExercise {
       ratioCounterpart.style.display = "block";
       element.className = "clickable clickableOption";
     }
-    KanaExercise.updatePercentage(ratioCounterpart.children[1]);
+    Exercise.updatePercentage(ratioCounterpart.children[1]);
   }
   static option(element) {
     var type = element.id;
@@ -419,15 +425,15 @@ class KanaExercise {
     document.getElementById("warnings").innerHTML = "";
     var canStart = true;
     if (!this.options.hiragana && !this.options.katakana) {
-      KanaExercise.warning("Cannot start without any kana enabled.");
+      Exercise.warning("Cannot start without any kana enabled.");
       canStart = false;
     }
     if (!this.options.rapid.enabled && !this.options.translate.enabled && !this.options.word.enabled && !this.options.paragraph.enabled) {
-      KanaExercise.warning("Cannot start when all problem types are disabled.")
+      Exercise.warning("Cannot start when all problem types are disabled.")
       canStart = false;
     }
     if (this.options.rapid.chance == "invalid" && this.options.rapid.enabled || this.options.translate.chance == "invalid" && this.options.translate.enabled || this.options.word.chance == "invalid" && this.options.word.enabled  || this.options.paragraph.chance == "invalid" && this.options.paragraph.enabled) {
-      KanaExercise.warning("Cannot start when problem type chances are invalid.")
+      Exercise.warning("Cannot start when problem type chances are invalid.")
       canStart = false;
     }
     if (canStart) {
@@ -454,8 +460,8 @@ class KanaExercise {
       }
     }
     this.currentProblem = problems[weightedRandom(probabilityArray)];
-    //KanaExercise[this.currentProblem.type]();
-    KanaExercise["rapid"]();
+    //Exercise[this.currentProblem.type]();
+    Exercise["word"]();
   }
   static validate(answer) {
     if (answer == this.correctAnswer) {
@@ -529,5 +535,8 @@ class KanaExercise {
       randomChoices.splice(index,1);
     };
 
+  }
+  static word() {
+    
   }
 }
