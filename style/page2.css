@@ -129,8 +129,53 @@ h2 {
 #rapidExercise .choices .clickable:first-child {
   margin-left:0;
 }
-
-
+#writeProblem .wordParent {
+  width:100%;
+  position:relative;
+  margin-bottom:5px;
+}
+#writeProblem .wordParent p {
+  display:inline-block;
+  text-align:center;
+  padding-left:2.5px;
+  padding-right:2.5px;
+  margin-left:-4px;
+}
+#writeProblem .wordParent p:first-child {
+  border-top-left-radius:5px;
+  border-bottom-left-radius:5px;
+}
+#writeProblem .wordParent p:nth-last-child(0n+2) {
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
+}
+#writeProblem .wordParent p:last-child {
+  margin-left:-9px;
+}
+#writeProblem .finishedWord {
+  background-color:rgba(115,255,15,0.3);
+}
+#writeProblem .failedWord {
+  background-color:rgba(255,60,60,0.3);
+}
+#writeProblem .currentWord {
+  background-color:rgba(255,255,15,0.3);
+  border-top-right-radius:5px;
+  border-bottom-right-radius:5px;
+}
+#writeProblem input {
+  height:30px;
+  width:300px;
+  font-size:20px;
+  color:rgb(100,100,100);
+  border:1px solid rgb(100,100,100);
+  border-radius:10px;
+  box-sizing:border-box;
+}
+#writeProblem input:focus {
+  outline:0;
+  border:1px solid rgb(80,180,10);
+}
 .warning {
   color:red;
 }

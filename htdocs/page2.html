@@ -73,7 +73,7 @@
               <div class="clickable clickableOption" id="write" onclick="Exercise.problem(this)">
                 <div class="circle"></div>
                 <h2>Write</h2>
-                <p>Write the given phrase in Romaji.</p>
+                <p>Type the given phrase in Romaji.</p>
               </div>
               <div class="clickable clickableOption unchosen" id="translate" onclick="Exercise.problem(this)">
                 <div class="circle"></div>
@@ -95,18 +95,22 @@
                 <div class="circle"></div>
                 <p><span>Disable</span> Hiragana</p>
               </div>
+              <div class="clickableOption clickable " id="rapidRomaji" onclick="Exercise.option(this)">
+                <div class="circle"></div>
+                <p><span>Disable</span> Romaji Options (Rapid)</p>
+              </div>
             </div>
             <div id="exerciseRatiosParent">
               <p>If you ran the exercise <span id="total">95</span> times, the amount of times each exercise that appeared would roughly be:</h2>
               <div class="exerciseRatios">
                 <div id="chanceRapid">
-                  <h2>Rapid: </h2> <input type="text" value="65"> <br>
+                  <h2>Rapid: </h2> <input type="text" value="65" class="ratio"> <br>
                 </div>
                 <div id="chanceTranslate" style="display:none;">
-                  <h2>Translate: </h2> <input type="text" value="15"> <br>
+                  <h2>Translate: </h2> <input type="text" value="15" class="ratio"> <br>
                 </div>
                 <div id="chanceWrite">
-                  <h2>Write: </h2> <input type="text" value="15">
+                  <h2>Write: </h2> <input type="text" value="15" class="ratio">
                 </div>
                 <p>(you can modify these)</p>
               </div>
@@ -140,8 +144,17 @@
           </div>
         </div>
       </div>
-      <div id="wordProblem" class="centerer">
-
+      <div id="writeProblem" class="centerer">
+        <div class="wordParent">
+          <p class="finishedWord">The</p>
+          <p class="failedWord">ate</p>
+          <p class="finishedWord">him</p>
+          <p class="currentWord">man</p>
+          <p>ate</p>
+          <p>him</p>
+          <p>.</p>
+        </div>
+        <input type="text" id="writeInput" value="">
       </div>
     </div>
   </body>

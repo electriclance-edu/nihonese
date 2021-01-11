@@ -125,6 +125,23 @@ function randNumFloat(max) {
 }
 function processWords() {
   var arrayWordList = rawWordList.split("\n");
+  var wordTypes = [
+    "verb",[3],
+    "suru verb/adverb",[5,4],
+    "proper noun",[1],
+    "pronoun",[0],
+    "number",[1,2],
+    "noun/suru verb",[1,5],
+    "noun/no adj",[1,2],
+    "noun/na adj",[1,2],
+    "noun/adverb",[1,4],
+    "noun",[1],
+    "na adj/adverb",[2,4],
+    "na adj",[2],
+    "i adj",[2],
+    "expression/i adj",[2],
+    "adverb",[4]
+  ]
   for (var i = 0; i < arrayWordList.length; i++) {
     var rawWordObject = arrayWordList[i].split(",");
     var wordObject = {
@@ -134,10 +151,31 @@ function processWords() {
       meaning:rawWordObject[3],
       meaningTwo:rawWordObject[4],
       wordType:rawWordObject[5],
-      note:rawWordObject[6]
+      note:rawWordObject[6],
+      romaji:rawWordObject[8],
+      katakanaReading:rawWordObject[9]
+    }
+    var index = -1;
+    for (var j = 0; j < wordTypes.length; j += 2) {
+      if (wordObject.wordType == wordTypes[j]) {
+        index = wordTypes[j + 1];
+        break;
+      }
+    }
+    if (index != -1) {
+      for (var j = 0; j < index.length; j++) {
+        groupedWordList[index[j]].push([
+          wordObject.meaning,
+          wordObject.romaji,
+          wordObject.katakanaReading,
+          wordObject.reading,
+          true
+        ]);
+      }
     }
     arrayWordList[i] = wordObject;
   }
+  wordList = arrayWordList;
 }
 class Table {
   //display related
@@ -336,9 +374,10 @@ class Exercise {
       hiragana:true,
       katakana:true,
       japaneseTyping:true,
+      rapidRomaji:true,
       rapid:{type:"rapid",enabled:true,chance:85},
       translate:{type:"translate",enabled:false,chance:15},
-      write:{type:"write",enabled:true,chance:15}
+      write:{type:"write",enabled:true,chance:1500}
     }
     this.characterList = [[...characterData.katakana],[...characterData.hiragana]];
     for (var i = 0; i < 2; i++) {
@@ -352,7 +391,7 @@ class Exercise {
       }
     }
     this.wordList = [...wordList];
-    var ratios = document.getElementsByTagName("input");
+    var ratios = document.getElementsByClassName("ratio");
     for (var i = 0; i < ratios.length; i++) {
       ratios[i].addEventListener("input", function (e) {
         Exercise.updatePercentage(this);
@@ -458,6 +497,10 @@ class Exercise {
       }
     }
     this.currentProblem = problems[weightedRandom(probabilityArray)];
+    var problemElements = document.getElementById("problemParent").children;
+    for (var i = 0; i < problemElements.length; i++) {
+      problemElements[i].style.display = "none";
+    }
     Exercise[this.currentProblem.type]();
   }
   static validate(answer) {
@@ -487,6 +530,7 @@ class Exercise {
     },300);
   }
   static rapid() {
+    document.getElementById("rapidExercise").style.display = "block";
     var randomCharacter = this.characterList;
     if (!this.options.hiragana) {
       var kanaIndex = 0;
@@ -501,13 +545,19 @@ class Exercise {
     randomCharacter = randomCharacter[familyIndex];
     var characterIndex = randNum(randomCharacter.length - 1);
     var choosable = [...this.characterList[kanaIndex][familyIndex]];
-    var characterType = randNum(1);
+    if (this.options.rapidRomaji) {
+      var characterType = randNum(1);
+    } else {
+      var characterType = 0;
+    }
     randomCharacter = randomCharacter[characterIndex];
     document.getElementById("rapidCharacter").innerHTML = randomCharacter[characterType];
 
     if (characterType == 1) {
+      document.getElementById("instruction").innerHTML = "Which reading matches the following character?";
       characterType = 0;
     } else {
+      document.getElementById("instruction").innerHTML = "Which character has the following reading?";
       characterType = 1;
     }
 
@@ -529,11 +579,61 @@ class Exercise {
 
   }
   static write() {
+    document.getElementById("writeProblem").style.display = "block";
+    //select random sentence type
+    if (!this.options.hiragana) {
+      var kanaIndex = 0;
+    } else if (!this.options.katakana) {
+      var kanaIndex = 1;
+    } else {
+      var kanaIndex = randNum(1);
+    }
+    var randomSentence = sentenceTypes[kanaIndex];
+    randomSentence = randomSentence[randNum(randomSentence.length - 1)];
+    //split it apart at the slashes (/'s)
+    randomSentence = randomSentence.split("/");
+    for (var i = 0; i < randomSentence.length; i++) {
+      if (randomSentence[i][0] == "*") {
+        if (randomSentence[i].substring(1) == "verb") {
+          if (randNum(1) == 0) {
+            //suru verb, 5
+            randomSentence[i] = groupedWordList[5][randNum(groupedWordList[5].length - 1)];
+            if (kanaIndex == 0) {
+              randomSentence.splice(i + 1,0,"スル");
+            } else {
+              randomSentence.splice(i + 1,"する","スル");
+            }
+          } else {
+            //verb, 3
+            randomSentence[i] = groupedWordList[3][randNum(groupedWordList[3].length - 1)]
+          }
+        } else {
+          var key = [["pronoun","noun","adj","adverb"],[0,1,2,4]];
+          var index = 1;
+          for (var j = 0; j < key[0].length; j++) {
+            if (key[0][j] == randomSentence[i].substring(1)) {
+              index = key[1][j];
+              break;
+            }
+          }
+          randomSentence[i] = groupedWordList[index][randNum(groupedWordList[index].length - 1)];
+        }
+      }
+    }
+    console.log(randomSentence);
+
+
+    //keep track of the romaji version of it (set it to correctAnswer)
+
+
     //generate a random sentence then user will have to input romaji
     //preferrably, while the user is typing, check green which ones were finished typed, and check yellow the word that the player is currently on
     //after done, show which words were detected as mistakes
-    console.log("write");
-    this.rapid();
+  }
+  static writeType() {
+    //keep track per word
+    //every time space is pressed, go to next word
+    //when
   }
   static translate() {
     console.log("translate");
