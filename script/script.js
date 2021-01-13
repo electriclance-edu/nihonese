@@ -19,6 +19,20 @@ function onloadPage2() {
   document.addEventListener("keypress", function(event) {
     if (parseInt(event.key) < 6 && Exercise.currentProblem.type == "rapid") {
       document.getElementById("rapidExercise").children[document.getElementById("rapidExercise").children.length - 1].children[event.key - 1].click();
+    } if (Exercise.currentProblem.type == "write") {
+      if (event.code == "Space" || event.code == "Enter") {
+        //terrible bit of code that is completely tied to Exercise.writeValidate() and really should just be there
+        if (Exercise.answer.length == Exercise.correctAnswer.length - 1) {
+          document.getElementById("writeProblem").children[0].innerHTML = "Press enter/space again to go to the next problem.";
+        }
+        if (Exercise.answer.length < Exercise.correctAnswer.length) {
+          Exercise.writeValidate();
+        } else if (Exercise.answer.length == Exercise.correctAnswer.length) {
+          Exercise.randomProblem();
+        }
+      } else {
+        document.getElementById("writeInput").focus();
+      }
     }
   });
 }
@@ -168,8 +182,7 @@ function processWords() {
           wordObject.meaning,
           wordObject.romaji,
           wordObject.katakanaReading,
-          wordObject.reading,
-          true
+          wordObject.reading
         ]);
       }
     }
@@ -375,9 +388,9 @@ class Exercise {
       katakana:true,
       japaneseTyping:true,
       rapidRomaji:true,
-      rapid:{type:"rapid",enabled:true,chance:85},
+      rapid:{type:"rapid",enabled:true,chance:70},
       translate:{type:"translate",enabled:false,chance:15},
-      write:{type:"write",enabled:true,chance:1500}
+      write:{type:"write",enabled:true,chance:30}
     }
     this.characterList = [[...characterData.katakana],[...characterData.hiragana]];
     for (var i = 0; i < 2; i++) {
@@ -580,6 +593,7 @@ class Exercise {
   }
   static write() {
     document.getElementById("writeProblem").style.display = "block";
+    document.getElementById("writeProblem").children[0].innerHTML = "Type the romaji version of the highlighted word.";
     //select random sentence type
     if (!this.options.hiragana) {
       var kanaIndex = 0;
@@ -592,6 +606,12 @@ class Exercise {
     randomSentence = randomSentence[randNum(randomSentence.length - 1)];
     //split it apart at the slashes (/'s)
     randomSentence = randomSentence.split("/");
+    //remove all ""'s
+    for (var i = 0; i < randomSentence.length; i++) {
+      if (randomSentence[i] == ""|| randomSentence[i] == " ") {
+        randomSentence.splice(i,1);
+      }
+    }
     for (var i = 0; i < randomSentence.length; i++) {
       if (randomSentence[i][0] == "*") {
         if (randomSentence[i].substring(1) == "verb") {
@@ -599,9 +619,9 @@ class Exercise {
             //suru verb, 5
             randomSentence[i] = groupedWordList[5][randNum(groupedWordList[5].length - 1)];
             if (kanaIndex == 0) {
-              randomSentence.splice(i + 1,0,"スル");
+              randomSentence.splice(i + 1,0,"する");
             } else {
-              randomSentence.splice(i + 1,"する","スル");
+              randomSentence.splice(i + 1,0,"スル");
             }
           } else {
             //verb, 3
@@ -618,9 +638,31 @@ class Exercise {
           }
           randomSentence[i] = groupedWordList[index][randNum(groupedWordList[index].length - 1)];
         }
+      } else {
+        //locate the reference that equals the word
+        var reference = ["error","eroru","エロル","えろる"]
+
+        for (var j = 0; j < wordReference.length; j++) {
+          if (wordReference[j][3 - kanaIndex] == randomSentence[i].trim()) {
+            reference = wordReference[j];
+            break;
+          }
+        }
+        randomSentence[i] = reference;
       }
     }
-    console.log(randomSentence);
+    this.correctAnswer = [];
+    this.answer = [];
+
+    var wordParent = document.getElementById("wordParent");
+    wordParent.innerHTML = "";
+    for (var i = 0; i < randomSentence.length; i++) {
+      var word = document.createElement("p");
+      word.innerHTML = randomSentence[i][randomSentence[i].length - 1 - kanaIndex];
+      wordParent.appendChild(word);
+      this.correctAnswer.push(randomSentence[i][1]);
+    }
+    wordParent.children[0].className = "currentWord"
 
 
     //keep track of the romaji version of it (set it to correctAnswer)
@@ -630,13 +672,44 @@ class Exercise {
     //preferrably, while the user is typing, check green which ones were finished typed, and check yellow the word that the player is currently on
     //after done, show which words were detected as mistakes
   }
-  static writeType() {
-    //keep track per word
-    //every time space is pressed, go to next word
-    //when
+  static writeValidate() {
+    var input = document.getElementById("writeInput");
+    var answer = input.value.toLowerCase();
+
+    if (Exercise.answer.length < Exercise.correctAnswer.length - 1) {
+      document.getElementById("wordParent").children[Exercise.answer.length + 1].className = "currentWord";
+    }
+
+    this.answer.push(answer);
+
+    if (this.correctAnswer[this.answer.length - 1] == answer) {
+      document.getElementById("wordParent").children[this.answer.length - 1].className = "finishedWord uncurrent";
+    } else {
+      if (this.verifyOu(answer,this.correctAnswer[this.answer.length - 1])) {
+        document.getElementById("wordParent").children[this.answer.length - 1].className = "finishedWord uncurrent";
+      } else {
+        document.getElementById("wordParent").children[this.answer.length - 1].className = "failedWord uncurrent";
+      }
+    }
+
+    input.value = "";
   }
   static translate() {
     console.log("translate");
     this.rapid;
+  }
+  static verifyOu(text,comparison) {
+    text = [text.toLowerCase().split("oo"),text.toLowerCase().split("ou")];
+    comparison = [comparison.toLowerCase().split("ou"),comparison.toLowerCase().split("oo")];
+    var equal = [true,true];
+    for (var i = 0; i < 2; i++) {
+      for (var j = 0; j < text[i].length; j++) {
+        if (text[i][j] != comparison[i][j]) {
+          equal[i] = false;
+          break;
+        }
+      }
+    }
+    return equal[0] || equal[1];
   }
 }
