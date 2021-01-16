@@ -24,6 +24,11 @@ function onloadPage2() {
         //terrible bit of code that is completely tied to Exercise.writeValidate() and really should just be there
         if (Exercise.answer.length == Exercise.correctAnswer.length - 1) {
           document.getElementById("writeProblem").children[0].innerHTML = "Press enter/space again to go to the next problem.";
+          Exercise.answers.push({
+            answered:Exercise.answer,
+            correct:Exercise.correctAnswer,
+            problemType:Exercise.currentProblem
+          });
         }
         if (Exercise.answer.length < Exercise.correctAnswer.length) {
           Exercise.writeValidate();
@@ -136,6 +141,15 @@ function randNum(max) {
 }
 function randNumFloat(max) {
   return Math.random() * max;
+}
+function shuffleArray(array) {
+  for (var i = array.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var oldElement = array[i];
+      array[i] = array[j];
+      array[j] = oldElement;
+  }
+  return array;
 }
 function processWords() {
   var arrayWordList = rawWordList.split("\n");
@@ -388,7 +402,7 @@ class Exercise {
       katakana:true,
       japaneseTyping:true,
       rapidRomaji:true,
-      rapid:{type:"rapid",enabled:true,chance:70},
+      rapid:{type:"rapid",enabled:false,chance:70},
       translate:{type:"translate",enabled:false,chance:15},
       write:{type:"write",enabled:true,chance:30}
     }
@@ -515,6 +529,7 @@ class Exercise {
       problemElements[i].style.display = "none";
     }
     Exercise[this.currentProblem.type]();
+    console.log(this.answers);
   }
   static validate(answer) {
     if (answer == this.correctAnswer) {
@@ -523,7 +538,7 @@ class Exercise {
       this.answers.push({
         correct:true,
         answered:answer,
-        correct:this.correctAnswer,
+        trueAnswer:this.correctAnswer,
         problemType:this.currentProblem
       });
       this.randomProblem();
@@ -533,7 +548,7 @@ class Exercise {
       this.answers.push({
         correct:false,
         answered:answer,
-        correct:this.correctAnswer,
+        trueAnswer:this.correctAnswer,
         problemType:this.currentProblem
       });
       this.randomProblem();
@@ -580,10 +595,28 @@ class Exercise {
     var choices = document.getElementById("rapidExercise").children;
     var randomChoices = [this.correctAnswer];
     choices = choices[choices.length - 1].children;
+
+    if (randomCharacter[0] == "ji") {
+      var jiExists = true;
+    } else {
+      var jiExists = false;
+    }
+
     for (var i = 1; i < choices.length; i++) {
       characterIndex = randNum(choosable.length - 1);
-      randomChoices.push(choosable[characterIndex][characterType]);
+      if (choosable[characterIndex][0] != "ji") {
+        randomChoices.push(choosable[characterIndex][characterType]);
+        choosable.splice(characterIndex,1);
+      } else if (!jiExists) {
+        jiExists = true;
+        randomChoices.push(choosable[characterIndex][characterType]);
+        choosable.splice(characterIndex,1);
+      } else {
+        i--;
+      }
     }
+    randomChoices = shuffleArray(randomChoices);
+
     for (var i = 0; i < choices.length; i++) {
       var index = randNum(randomChoices.length - 1);
       choices[i].children[0].innerHTML = randomChoices[index];
@@ -688,7 +721,13 @@ class Exercise {
       if (this.verifyOu(answer,this.correctAnswer[this.answer.length - 1])) {
         document.getElementById("wordParent").children[this.answer.length - 1].className = "finishedWord uncurrent";
       } else {
-        document.getElementById("wordParent").children[this.answer.length - 1].className = "failedWord uncurrent";
+        var wordParent = document.getElementById("wordParent");
+        wordParent.children[this.answer.length - 1].className = "failedWord uncurrent";
+        wordParent.className = "wordParent expandedParent";
+
+        var trueAnswer = document.createElement("p");
+        trueAnswer.innerHTML = this.correctAnswer[this.answer.length - 1];
+        wordParent.children[this.answer.length - 1].appendChild(trueAnswer);
       }
     }
 
