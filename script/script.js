@@ -14,26 +14,26 @@ function onloadPage1() {
 }
 function onloadPage2() {
   onload();
-  Exercise.initialize();
+  KanaExercise.initialize();
   processWords();
   document.addEventListener("keypress", function(event) {
-    if (parseInt(event.key) < 6 && Exercise.currentProblem.type == "rapid") {
+    if (parseInt(event.key) < 6 && KanaExercise.currentProblem.type == "rapid") {
       document.getElementById("rapidExercise").children[document.getElementById("rapidExercise").children.length - 1].children[event.key - 1].click();
-    } if (Exercise.currentProblem.type == "write") {
+    } if (KanaExercise.currentProblem.type == "write") {
       if (event.code == "Space" || event.code == "Enter") {
-        //terrible bit of code that is completely tied to Exercise.writeValidate() and really should just be there
-        if (Exercise.answer.length == Exercise.correctAnswer.length - 1) {
+        //terrible bit of code that is completely tied to KanaExercise.writeValidate() and really should just be there
+        if (KanaExercise.answer.length == KanaExercise.correctAnswer.length - 1) {
           document.getElementById("writeProblem").children[0].innerHTML = "Press enter/space again to go to the next problem.";
-          Exercise.answers.push({
-            answered:Exercise.answer,
-            correct:Exercise.correctAnswer,
-            problemType:Exercise.currentProblem
+          KanaExercise.answers.push({
+            answered:KanaExercise.answer,
+            correct:KanaExercise.correctAnswer,
+            problemType:KanaExercise.currentProblem
           });
         }
-        if (Exercise.answer.length < Exercise.correctAnswer.length) {
-          Exercise.writeValidate();
-        } else if (Exercise.answer.length == Exercise.correctAnswer.length) {
-          Exercise.randomProblem();
+        if (KanaExercise.answer.length < KanaExercise.correctAnswer.length) {
+          KanaExercise.writeValidate();
+        } else if (KanaExercise.answer.length == KanaExercise.correctAnswer.length) {
+          KanaExercise.randomProblem();
         }
       } else {
         document.getElementById("writeInput").focus();
@@ -54,10 +54,10 @@ function capitalize(text) {
   return text;
 }
 function toggle(id) {
-  if (document.getElementById(id).style.display == "none") {
-    document.getElementById(id).style.display = "block";
+  if (document.getElementById(id).style.opacity == "0") {
+    document.getElementById(id).style.opacity = "1";
   } else {
-    document.getElementById(id).style.display = "none";
+    document.getElementById(id).style.opacity = "0";
   }
 }
 function onload404() {
@@ -394,16 +394,14 @@ class SyllableObject {
     this.note = note;
   }
 }
-class Exercise {
+class KanaExercise {
   static initialize() {
     this.options = {
-      time:true,
+      //time:true, might be added in the future, seems unnecessary for now
       hiragana:true,
       katakana:true,
-      japaneseTyping:true,
       rapidRomaji:true,
-      rapid:{type:"rapid",enabled:false,chance:70},
-      translate:{type:"translate",enabled:false,chance:15},
+      rapid:{type:"rapid",enabled:true,chance:70},
       write:{type:"write",enabled:true,chance:30}
     }
     this.characterList = [[...characterData.katakana],[...characterData.hiragana]];
@@ -421,7 +419,7 @@ class Exercise {
     var ratios = document.getElementsByClassName("ratio");
     for (var i = 0; i < ratios.length; i++) {
       ratios[i].addEventListener("input", function (e) {
-        Exercise.updatePercentage(this);
+        KanaExercise.updatePercentage(this);
       });
     }
   }
@@ -437,7 +435,7 @@ class Exercise {
       ratioCounterpart.style.display = "block";
       element.className = "clickable clickableOption";
     }
-    Exercise.updatePercentage(ratioCounterpart.children[1]);
+    KanaExercise.updatePercentage(ratioCounterpart.children[1]);
   }
   static option(element) {
     var type = element.id;
@@ -459,7 +457,7 @@ class Exercise {
     }
     element.style.backgroundColor = "";
     this.options[element.parentElement.id.substring(6).toLowerCase()].chance = element.value;
-    var problemTypes = ["rapid","translate","write"];
+    var problemTypes = ["rapid","write"];
     var total = 0;
     var totalBlank = 0;
     var problemType;
@@ -489,15 +487,15 @@ class Exercise {
     document.getElementById("warnings").innerHTML = "";
     var canStart = true;
     if (!this.options.hiragana && !this.options.katakana) {
-      Exercise.warning("Cannot start without any kana enabled.");
+      KanaExercise.warning("Cannot start without any kana enabled.");
       canStart = false;
     }
-    if (!this.options.rapid.enabled && !this.options.translate.enabled && !this.options.write.enabled) {
-      Exercise.warning("Cannot start when all problem types are disabled.")
+    if (!this.options.rapid.enabled && !this.options.write.enabled) {
+      KanaExercise.warning("Cannot start when all problem types are disabled.")
       canStart = false;
     }
-    if (this.options.rapid.chance == "invalid" && this.options.rapid.enabled || this.options.translate.chance == "invalid" && this.options.translate.enabled || this.options.write.chance == "invalid" && this.options.write.enabled) {
-      Exercise.warning("Cannot start when problem type chances are invalid.")
+    if (this.options.rapid.chance == "invalid" && this.options.rapid.enabled || this.options.write.chance == "invalid" && this.options.write.enabled) {
+      KanaExercise.warning("Cannot start when problem type chances are invalid.")
       canStart = false;
     }
     if (canStart) {
@@ -516,7 +514,7 @@ class Exercise {
     var problems = [];
     var probabilityArray = [];
     var optionKeys = Object.keys(this.options);
-    for (var i = optionKeys.length - 5; i < optionKeys.length; i++) {
+    for (var i = optionKeys.length - 3; i < optionKeys.length; i++) {
       var problem = this.options[optionKeys[i]];
       if (problem.enabled) {
         probabilityArray.push(parseInt(problem.chance));
@@ -528,8 +526,7 @@ class Exercise {
     for (var i = 0; i < problemElements.length; i++) {
       problemElements[i].style.display = "none";
     }
-    Exercise[this.currentProblem.type]();
-    console.log(this.answers);
+    KanaExercise[this.currentProblem.type]();
   }
   static validate(answer) {
     if (answer == this.correctAnswer) {
@@ -709,8 +706,8 @@ class Exercise {
     var input = document.getElementById("writeInput");
     var answer = input.value.toLowerCase();
 
-    if (Exercise.answer.length < Exercise.correctAnswer.length - 1) {
-      document.getElementById("wordParent").children[Exercise.answer.length + 1].className = "currentWord";
+    if (KanaExercise.answer.length < KanaExercise.correctAnswer.length - 1) {
+      document.getElementById("wordParent").children[KanaExercise.answer.length + 1].className = "currentWord";
     }
 
     this.answer.push(answer);
@@ -732,10 +729,6 @@ class Exercise {
     }
 
     input.value = "";
-  }
-  static translate() {
-    console.log("translate");
-    this.rapid;
   }
   static verifyOu(text,comparison) {
     text = [text.toLowerCase().split("oo"),text.toLowerCase().split("ou")];
