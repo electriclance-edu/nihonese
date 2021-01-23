@@ -37,58 +37,119 @@
           </div>
         </div>
         <div class="selectedRedirect redirectMenuHoverer redirect">
-          <a href="../index.html#sectionThree">Exercises<img src="../images/exerciseIcon.png" alt=""></a>
-          <div class="redirectMenuParent">
-            <div class="redirect">
-              <a href="page2.html" class="">Kana</a>
-            </div>
-            <div class="redirect">
-              <a href="page3.html" class="">Kanji</a>
-            </div>
-          </div>
+          <a href="page2.html">Exercises<img src="../images/exerciseIcon.png" alt=""></a>
         </div>
       </div>
     </div>
     <div class="sectionOne" id="sectionOne">
       <div class="horizontalCenterer">
-        <h1 id="pageTitle">kana exercises</h1>
-        <div class="clickable beginExercise" onclick="KanaExercise.beginExercise()">
+        <h1 id="pageTitle">japanese exercises</h1>
+        <div class="clickable beginExercise" onclick="Exercise.beginExercise()">
           <h2>Start the exercise!</h2>
           <div id="warnings">
 
           </div>
         </div> <br>
-        <p class="clickable inlineBlock" onclick="toggle('options')">extra options</p>
-        <div id="options" style="opacity:0">
+        <p class="clickable inlineBlock" onclick="toggleExclusive('exercisePresets')">exercise presets</p>
+        <p class="clickable inlineBlock" onclick="toggleExclusive('options')">extra options</p>
+        <div id="exercisePresets">
+          <div class="clickable clickableOption" onclick="Exercise.preset(0)">
+            <div class="circle"></div>
+            <h2>General</h2>
+            <p>Practice your general japanese reading skill!</p>
+          </div>
+          <div class="clickable clickableOption unchosen" onclick="Exercise.preset(1)">
+            <div class="circle"></div>
+            <h2>Katakana</h2>
+            <p>Focus on your katakana reading skill.</p>
+          </div>
+          <div class="clickable clickableOption unchosen" onclick="Exercise.preset(2)">
+            <div class="circle"></div>
+            <h2>Hiragana</h2>
+            <p>Focus on your hiragana reading skill.</p>
+          </div>
+          <div class="clickable clickableOption unchosen" onclick="Exercise.preset(3)">
+            <div class="circle"></div>
+            <h2>Kanji</h2>
+            <p>Practice your <span class="smallText">not-katakana-nor-hiragana</span> reading skills.</p>
+          </div>
+          <div class="clickable clickableOption unchosen" onclick="Exercise.preset(0)">
+            <div class="circle"></div>
+            <h2>Meaning is Meaning</h2>
+            <p>How well do you know your kanji?</p>
+          </div>
+        </div>
+        <div id="options">
           <div class="exerciseSetup">
             <p>Choose which types of problems will appear in the exercise.</p>
             <div class="exerciseTypes">
-              <div class="clickable clickableOption" id="rapid" onclick="KanaExercise.problem(this)">
+              <div class="clickable clickableOption" id="rapid" onclick="Exercise.problem(this)">
                 <div class="circle"></div>
                 <h2>Rapid</h2>
-                <p>Match the prompt with the proper option.</p>
+                <p>Match the romaji/kana prompt with the correct option!</p>
               </div>
-              <div class="clickable clickableOption" id="write" onclick="KanaExercise.problem(this)">
+              <div class="clickable clickableOption" id="write" onclick="Exercise.problem(this)">
                 <div class="circle"></div>
                 <h2>Write</h2>
-                <p>Type the given phrase in Romaji.</p>
+                <p>Type the given nonsense phrase in romaji.</p>
+              </div>
+              <div class="clickable clickableOption" id="kanji" onclick="Exercise.problem(this);softToggle('kanjiExerciseInfo')">
+                <div class="circle"></div>
+                <h2>Kanji</h2>
+                <p>Give the required information about a given kanji.</p>
+              </div>
+            </div>
+            <div id="kanjiExerciseInfo" style="opacity:1">
+              <p>(Kanji Exercise) What can appear as a prompt?</p>
+              <div class="clickable clickableOption" onclick="Exercise.kanjiOption(this,'prompt')">
+                <div class="circle"></div>
+                <h2>Symbol</h2>
+              </div>
+              <div class="clickable clickableOption" onclick="Exercise.kanjiOption(this,'prompt')">
+                <div class="circle"></div>
+                <h2>Meaning</h2>
+              </div>
+              <div class="clickable clickableOption" onclick="Exercise.kanjiOption(this,'prompt')">
+                <div class="circle"></div>
+                <h2>Reading</h2>
+              </div>
+              <div class="clickable clickableOption" onclick="Exercise.kanjiOption(this,'prompt')">
+                <div class="circle"></div>
+                <h2>Type</h2>
+              </div>
+              <p>(Kanji Exercise) What can appear as an option?</p>
+              <div class="clickable clickableOption" onclick="Exercise.kanjiOption(this,'option')">
+                <div class="circle"></div>
+                <h2>Symbol</h2>
+              </div>
+              <div class="clickable clickableOption" onclick="Exercise.kanjiOption(this,'option')">
+                <div class="circle"></div>
+                <h2>Meaning</h2>
+              </div>
+              <div class="clickable clickableOption" onclick="Exercise.kanjiOption(this,'option')">
+                <div class="circle"></div>
+                <h2>Reading</h2>
+              </div>
+              <div class="clickable clickableOption" onclick="Exercise.kanjiOption(this,'option')">
+                <div class="circle"></div>
+                <h2>Type</h2>
               </div>
             </div>
             <p>Enable or disable certain exercise features.</p>
             <div class="exerciseOptions">
-              <!--<div class="clickableOption clickable" id="time" onclick="KanaExercise.option(this)">
+              <!--<div class="clickableOption clickable" id="time" onclick="Exercise.option(this)">
                 <div class="circle"></div>
                 <p><span>Disable</span> Time Limits</p>
               </div>-->
-              <div class="clickableOption clickable" id="katakana" onclick="KanaExercise.option(this)">
+              <div class="clickableOption clickable" id="katakana" onclick="Exercise.option(this)">
                 <div class="circle"></div>
                 <p><span>Disable</span> Katakana</p>
               </div>
-              <div class="clickableOption clickable" id="hiragana" onclick="KanaExercise.option(this)">
+              <div class="clickableOption clickable" id="hiragana" onclick="Exercise.option(this)">
                 <div class="circle"></div>
                 <p><span>Disable</span> Hiragana</p>
               </div>
-              <div class="clickableOption clickable " id="rapidRomaji" onclick="KanaExercise.option(this)">
+              <div class="clickableOption clickable " id="rapidRomaji" onclick="Exercise.option(this)">
                 <div class="circle"></div>
                 <p><span>Disable</span> Romaji Options (Rapid)</p>
               </div>
@@ -102,6 +163,9 @@
                 <div id="chanceWrite">
                   <h2>Write: </h2> <input type="text" value="30" class="ratio">
                 </div>
+                <div id="chanceKanji">
+                  <h2>Kanji: </h2> <input type="text" value="30" class="ratio">
+                </div>
                 <p>(you can modify these)</p>
               </div>
             </div>
@@ -110,36 +174,70 @@
       </div>
     </div>
     <div class="problemParent" id="problemParent">
-      <div id="rapidExercise" class="centerer">
-        <p id="instruction">Which character has the following reading?</p>
+      <div id="rapidProblem" class="centerer">
+        <p id="instruction">...</p>
         <p class="smallText">press 1, 2, 3, etc. or click to choose your answer.</p>
         <div class="character">
-          <p id="rapidCharacter">he</p>
+          <p id="rapidCharacter">...</p>
         </div>
         <div class="choices">
-          <div class="clickable" onclick="KanaExercise.validate(this.children[0].innerHTML)">
-            <p>loading...</p>
+          <div class="clickable" onclick="Exercise.rapidValidate(this.children[0].innerHTML)">
+            <p>...</p>
+            <p class="smallText">1</p>
           </div>
-          <div class="clickable" onclick="KanaExercise.validate(this.children[0].innerHTML)">
-            <p>loading...</p>
+          <div class="clickable" onclick="Exercise.rapidValidate(this.children[0].innerHTML)">
+            <p>...</p>
+            <p class="smallText">2</p>
           </div>
-          <div class="clickable" onclick="KanaExercise.validate(this.children[0].innerHTML)">
-            <p>loading...</p>
+          <div class="clickable" onclick="Exercise.rapidValidate(this.children[0].innerHTML)">
+            <p>...</p>
+            <p class="smallText">3</p>
           </div>
-          <div class="clickable" onclick="KanaExercise.validate(this.children[0].innerHTML)">
-            <p>loading...</p>
+          <div class="clickable" onclick="Exercise.rapidValidate(this.children[0].innerHTML)">
+            <p>...</p>
+            <p class="smallText">4</p>
           </div>
-          <div class="clickable" onclick="KanaExercise.validate(this.children[0].innerHTML)">
-            <p>loading...</p>
+          <div class="clickable" onclick="Exercise.rapidValidate(this.children[0].innerHTML)">
+            <p>...</p>
+            <p class="smallText">5</p>
           </div>
         </div>
       </div>
       <div id="writeProblem" class="centerer">
-        <p class="instruction">Type the romaji version of the highlighted word.</p>
+        <p>Type the romaji version of the highlighted word.</p>
         <p class="smallText">note: type long u's with uu, long o's with ou or oo, ぢ/ヂ with ji, づ/ヅ as du</p>
         <div class="wordParent" id="wordParent">
         </div>
         <input type="text" id="writeInput" value="">
+      </div>
+      <div id="kanjiProblem" class="centerer multipleChoiceProblem">
+        <p id="kanjiInstruction">...</p>
+        <p class="smallText">press 1, 2, 3, etc. or click to choose your answer.</p>
+        <div class="character">
+          <p id="rapidCharacter">...</p>
+        </div>
+        <div class="choices">
+          <div class="clickable" onclick="Exercise.kanjiValidate(this.children[0].innerHTML)">
+            <p>...</p>
+            <p class="smallText">1</p>
+          </div>
+          <div class="clickable" onclick="Exercise.kanjiValidate(this.children[0].innerHTML)">
+            <p>...</p>
+            <p class="smallText">2</p>
+          </div>
+          <div class="clickable" onclick="Exercise.kanjiValidate(this.children[0].innerHTML)">
+            <p>...</p>
+            <p class="smallText">3</p>
+          </div>
+          <div class="clickable" onclick="Exercise.kanjiValidate(this.children[0].innerHTML)">
+            <p>...</p>
+            <p class="smallText">4</p>
+          </div>
+          <div class="clickable" onclick="Exercise.kanjiValidate(this.children[0].innerHTML)">
+            <p>...</p>
+            <p class="smallText">5</p>
+          </div>
+        </div>
       </div>
     </div>
   </body>

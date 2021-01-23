@@ -5,16 +5,16 @@
     <meta name="author" content="Lance C. Libatique">
     <meta name="keywords" content="HTML, CSS, JavaScript, Japanese, Guide">
     <meta name="revised" content="6-01-2021">
-    <title>Katakana Exercises - Nihonese</title>
+    <title>Kanji Exercises - Nihonese</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
     <link rel="apple-touch-icon" sizes="180x180" href="../images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon-16x16.png">
     <link rel="stylesheet" href="../style/common.css">
-    <link rel="stylesheet" href="../style/page4.css">
+    <link rel="stylesheet" href="../style/page3.css">
     <script type="text/javascript" src="../script/script.js"></script>
   </head>
-  <body onload="onloadPage4()" id="body">
+  <body onload="onloadPage3()" id="body">
     <div class="toolbar">
       <a href="../index.html"><img src="../images/logo.png" alt="" id="logo"></a>
       <div class="redirectParent" id="redirectParent">
@@ -48,16 +48,64 @@
         </div>
       </div>
     </div>
-    <div class="sectionOne">
+    <div class="sectionOne" id="sectionOne">
+      <div class="horizontalCenterer">
+        <h1 id="pageTitle">kanji exercises</h1>
+        <div class="clickable beginExercise" onclick="KanaExercise.beginExercise()">
+          <h2>Start the exercise!</h2>
+          <div id="warnings">
 
-    </div>
-    <div class="referenceSection">
-      <hr>
-      <p class="smallText">DISCLAIMER: This website was made by a non-native learner of Japanese and as such may get things wrong. Take everything with a grain of salt, as you'd do on the <i>debatably trustworthy</i> world wide web!</p>
-      <div class="referenceContainer">
-      </div>
-      <div class="me">
-        <p>Made by <span class="rainbowText">Lance C. Libatique</span> of 9 - Sodium for CS3</p>
+          </div>
+        </div> <br>
+        <p class="clickable inlineBlock" onclick="toggle('options')">extra options</p>
+        <div id="options" style="opacity:0">
+          <div class="exerciseSetup">
+            <p>Choose which types of problems will appear in the exercise.</p>
+            <div class="exerciseTypes">
+              <div class="clickable clickableOption" id="rapid" onclick="KanaExercise.problem(this)">
+                <div class="circle"></div>
+                <h2>Rapid</h2>
+                <p>Match the prompt with the proper option.</p>
+              </div>
+              <div class="clickable clickableOption" id="write" onclick="KanaExercise.problem(this)">
+                <div class="circle"></div>
+                <h2>Write</h2>
+                <p>Type the given phrase in Romaji.</p>
+              </div>
+            </div>
+            <p>Enable or disable certain exercise features.</p>
+            <div class="exerciseOptions">
+              <!--<div class="clickableOption clickable" id="time" onclick="KanaExercise.option(this)">
+                <div class="circle"></div>
+                <p><span>Disable</span> Time Limits</p>
+              </div>-->
+              <div class="clickableOption clickable" id="katakana" onclick="KanaExercise.option(this)">
+                <div class="circle"></div>
+                <p><span>Disable</span> Katakana</p>
+              </div>
+              <div class="clickableOption clickable" id="hiragana" onclick="KanaExercise.option(this)">
+                <div class="circle"></div>
+                <p><span>Disable</span> Hiragana</p>
+              </div>
+              <div class="clickableOption clickable " id="rapidRomaji" onclick="KanaExercise.option(this)">
+                <div class="circle"></div>
+                <p><span>Disable</span> Romaji Options (Rapid)</p>
+              </div>
+            </div>
+            <div id="exerciseRatiosParent">
+              <p class="smallText">If you ran the exercise <span id="total">100</span> times, the amount of times each exercise that appeared would roughly be:</h2>
+              <div class="exerciseRatios">
+                <div id="chanceRapid">
+                  <h2>Rapid: </h2> <input type="text" value="70" class="ratio"> <br>
+                </div>
+                <div id="chanceWrite">
+                  <h2>Write: </h2> <input type="text" value="30" class="ratio">
+                </div>
+                <p>(you can modify these)</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </body>

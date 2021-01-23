@@ -1,4 +1,5 @@
 var typewriteElements = [];
+var currentEnabled = "";
 var skip = -1;
 function onloadHomepage() {
   //type in nihonese
@@ -14,26 +15,28 @@ function onloadPage1() {
 }
 function onloadPage2() {
   onload();
-  KanaExercise.initialize();
+  Exercise.initialize();
   processWords();
   document.addEventListener("keypress", function(event) {
-    if (parseInt(event.key) < 6 && KanaExercise.currentProblem.type == "rapid") {
-      document.getElementById("rapidExercise").children[document.getElementById("rapidExercise").children.length - 1].children[event.key - 1].click();
-    } if (KanaExercise.currentProblem.type == "write") {
+    if (parseInt(event.key) < 6 && Exercise.currentProblem.type == "rapid") {
+      document.getElementById("rapidProblem").children[document.getElementById("rapidProblem").children.length - 1].children[event.key - 1].click();
+    } else if (parseInt(event.key) < 6 && Exercise.currentProblem.type == "kanji") {
+      document.getElementById("kanjiProblem").children[document.getElementById("kanjiProblem").children.length - 1].children[event.key - 1].click();
+    } else if (Exercise.currentProblem.type == "write") {
       if (event.code == "Space" || event.code == "Enter") {
-        //terrible bit of code that is completely tied to KanaExercise.writeValidate() and really should just be there
-        if (KanaExercise.answer.length == KanaExercise.correctAnswer.length - 1) {
+        //terrible bit of code that is completely tied to Exercise.writeValidate() and really should just be there
+        if (Exercise.answer.length == Exercise.correctAnswer.length - 1) {
           document.getElementById("writeProblem").children[0].innerHTML = "Press enter/space again to go to the next problem.";
-          KanaExercise.answers.push({
-            answered:KanaExercise.answer,
-            correct:KanaExercise.correctAnswer,
-            problemType:KanaExercise.currentProblem
+          Exercise.answers.push({
+            answered:Exercise.answer,
+            correct:Exercise.correctAnswer,
+            problemType:Exercise.currentProblem
           });
         }
-        if (KanaExercise.answer.length < KanaExercise.correctAnswer.length) {
-          KanaExercise.writeValidate();
-        } else if (KanaExercise.answer.length == KanaExercise.correctAnswer.length) {
-          KanaExercise.randomProblem();
+        if (Exercise.answer.length < Exercise.correctAnswer.length) {
+          Exercise.writeValidate();
+        } else if (Exercise.answer.length == Exercise.correctAnswer.length) {
+          Exercise.randomProblem();
         }
       } else {
         document.getElementById("writeInput").focus();
@@ -53,11 +56,32 @@ function capitalize(text) {
   text = text[0].toUpperCase() + text.substring(1);
   return text;
 }
-function toggle(id) {
-  if (document.getElementById(id).style.opacity == "0") {
-    document.getElementById(id).style.opacity = "1";
+function softToggle(id) {
+  element = document.getElementById(id);
+  if (element.style.opacity == "1") {
+    element.style.opacity = "0.5";
+    element.style.pointerEvents = "none";
+  } else if (element.style.opacity == "0.5") {
+    element.style.opacity = "1";
+    element.style.pointerEvents = "all";
+  }
+}
+function toggleExclusive(id) {
+  element = document.getElementById(id);
+  if (id == currentEnabled) {
+    element.style.display = "none";
+    element.style.pointerEvents = "none";
+    currentEnabled = "";
+  } else if (currentEnabled == "") {
+    element.style.display = "block";
+    element.style.pointerEvents = "all";
+    currentEnabled = id;
   } else {
-    document.getElementById(id).style.opacity = "0";
+    element.style.display = "block";
+    element.style.pointerEvents = "all";
+    document.getElementById(currentEnabled).style.display = "none";
+    document.getElementById(currentEnabled).style.pointerEvents = "none";
+    currentEnabled = id;
   }
 }
 function onload404() {
@@ -181,7 +205,8 @@ function processWords() {
       wordType:rawWordObject[5],
       note:rawWordObject[6],
       romaji:rawWordObject[8],
-      katakanaReading:rawWordObject[9]
+      katakanaReading:rawWordObject[9],
+      kanaOnly:rawWordObject[10]
     }
     var index = -1;
     for (var j = 0; j < wordTypes.length; j += 2) {
@@ -394,15 +419,28 @@ class SyllableObject {
     this.note = note;
   }
 }
-class KanaExercise {
+class Exercise {
+  //initialize() initializes any required attributes for the class Exercise
   static initialize() {
     this.options = {
-      //time:true, might be added in the future, seems unnecessary for now
       hiragana:true,
       katakana:true,
       rapidRomaji:true,
-      rapid:{type:"rapid",enabled:true,chance:70},
-      write:{type:"write",enabled:true,chance:30}
+      rapid:{type:"rapid",enabled:false,chance:60},
+      write:{type:"write",enabled:false,chance:20},
+      kanji:{
+        type:"kanji",
+        enabled:true,
+        chance:10,
+        types:{
+          symbol:0,
+          meaning:1,
+          reading:2,
+          type:3
+        },
+        prompt:[true,true,true,true],
+        option:[true,true,true,true]
+      }
     }
     this.characterList = [[...characterData.katakana],[...characterData.hiragana]];
     for (var i = 0; i < 2; i++) {
@@ -419,24 +457,28 @@ class KanaExercise {
     var ratios = document.getElementsByClassName("ratio");
     for (var i = 0; i < ratios.length; i++) {
       ratios[i].addEventListener("input", function (e) {
-        KanaExercise.updatePercentage(this);
+        Exercise.updatePercentage(this);
       });
     }
   }
+  //problem() deals with elements that activate or disable problemTypes.
   static problem(element) {
     var type = element.id;
     var ratioCounterpart = document.getElementById("chance" + capitalize(type));
     if (this.options[type].enabled) {
       this.options[type].enabled = false;
-      ratioCounterpart.style.display = "none";
+      ratioCounterpart.style.opacity = "0.5";
+      ratioCounterpart.style.color = "rgb(150,150,150)";
       element.className = "clickable clickableOption unchosen";
     } else {
       this.options[type].enabled = true;
-      ratioCounterpart.style.display = "block";
+      ratioCounterpart.style.opacity = "1";
+      ratioCounterpart.style.color = "";
       element.className = "clickable clickableOption";
     }
-    KanaExercise.updatePercentage(ratioCounterpart.children[1]);
+    Exercise.updatePercentage(ratioCounterpart.children[1]);
   }
+  //option() deals with elements that activate or disable options. similar to problem()
   static option(element) {
     var type = element.id;
     if (this.options[type]) {
@@ -449,6 +491,7 @@ class KanaExercise {
       element.className = "clickable clickableOption";
     }
   }
+  //updatePercentage() deals with the percentage inputs and verifies if they're good or not.
   static updatePercentage(element) {
     if (isNaN(element.value) || parseInt(element.value) <= 0) {
       element.style.backgroundColor = "rgba(255,0,0,0.3)";
@@ -476,27 +519,74 @@ class KanaExercise {
       document.getElementById("exerciseRatiosParent").style.display = "block";
     }
   }
+  //kanjiOption() is similar to option() but for the options related to the kanji exercise instead.
+  static kanjiOption(element,group) {
+    var type = element.children[1].innerHTML.toLowerCase();
+    var index = this.options.kanji.types[type];
+
+    if (this.options.kanji[group][index] == true) {
+      this.options.kanji[group][index] = false;
+      element.className = "clickable clickableOption unchosen";
+    } else {
+      this.options.kanji[group][index] = true;
+      element.className = "clickable clickableOption";
+    }
+  }
+  //warning() generates the red text that appears below the start exercise button whenever the options are invalid
   static warning(text) {
     var warningElement = document.createElement("p");
     warningElement.className = "warning";
     warningElement.innerHTML = text;
     document.getElementById("warnings").appendChild(warningElement);
   }
+  //beginExercise() verifies if the exercise can begin, and if it can, hides the start screen and calls randomProblem() to truly begin the exercises.
   static beginExercise() {
     //validate if options are good to start
     document.getElementById("warnings").innerHTML = "";
     var canStart = true;
     if (!this.options.hiragana && !this.options.katakana) {
-      KanaExercise.warning("Cannot start without any kana enabled.");
+      Exercise.warning("Cannot start without any kana enabled.");
       canStart = false;
     }
-    if (!this.options.rapid.enabled && !this.options.write.enabled) {
-      KanaExercise.warning("Cannot start when all problem types are disabled.")
+    if (!this.options.rapid.enabled && !this.options.write.enabled && !this.options.kanji.enabled) {
+      Exercise.warning("Cannot start when all problem types are disabled.")
       canStart = false;
     }
-    if (this.options.rapid.chance == "invalid" && this.options.rapid.enabled || this.options.write.chance == "invalid" && this.options.write.enabled) {
-      KanaExercise.warning("Cannot start when problem type chances are invalid.")
+    if (this.options.rapid.chance == "invalid" && this.options.rapid.enabled || this.options.write.chance == "invalid" && this.options.write.enabled || this.options.kanji.chance == "invalid" && this.options.kanji.enabled) {
+      Exercise.warning("Cannot start when problem type chances are invalid.")
       canStart = false;
+    }
+    if (this.options.kanji.enabled) {
+      //if everything is disabled, then don't start
+      if (this.options.kanji.prompt.every(function(bool){return bool == false})) {
+        Exercise.warning("Cannot start with no enabled kanji prompts.")
+        canStart = false;
+      }
+      if (this.options.kanji.option.every(function(bool){return bool == false})) {
+        Exercise.warning("Cannot start with no enabled kanji options.")
+        canStart = false;
+      }
+      //if there is only one enabled prompt and option, and that they're equal
+      var enabledIndex = [-1,-1];
+      var count = [0,0];
+      for (var i = 0; i < this.options.kanji.prompt.length; i++) {
+        if (this.options.kanji.prompt[i]) {
+          enabledIndex[0] = i;
+          count[0]++;
+        }
+      }
+      for (var i = 0; i < this.options.kanji.option.length; i++) {
+        if (this.options.kanji.option[i]) {
+          enabledIndex[1] = i;
+          count[1]++;
+        }
+      }
+      if (count[0] == 1 && count[1] == 1) {
+        if (enabledIndex[0] == enabledIndex[1]) {
+          Exercise.warning("Cannot start when the only enabled kanji prompt and option are exactly the same.")
+          canStart = false;
+        }
+      }
     }
     if (canStart) {
       this.answers = [];
@@ -510,6 +600,7 @@ class KanaExercise {
       this.randomProblem();
     }
   }
+  //randomProblem() determines which problems can appear (aka those that are enabled in this.options) and chooses one with weightedRandom()
   static randomProblem() {
     var problems = [];
     var probabilityArray = [];
@@ -526,9 +617,10 @@ class KanaExercise {
     for (var i = 0; i < problemElements.length; i++) {
       problemElements[i].style.display = "none";
     }
-    KanaExercise[this.currentProblem.type]();
+    Exercise[this.currentProblem.type]();
   }
-  static validate(answer) {
+  //rapidValidate() is used by the choice elements in the rapidProblem div, confirms if the answer given is correct, and starts a new problem if so
+  static rapidValidate(answer) {
     if (answer == this.correctAnswer) {
       clearTimeout(this.timeout);
       document.getElementById("problemParent").style.backgroundColor = "rgba(115,255,15,0.3)";
@@ -554,8 +646,9 @@ class KanaExercise {
       document.getElementById("problemParent").style.backgroundColor = "";
     },300);
   }
+  //rapid() deals with choice and prompt generation for the rapid exercises, along with displaying them
   static rapid() {
-    document.getElementById("rapidExercise").style.display = "block";
+    documents.getElementById("rapidProblem").style.display = "block";
     var randomCharacter = this.characterList;
     if (!this.options.hiragana) {
       var kanaIndex = 0;
@@ -579,17 +672,17 @@ class KanaExercise {
     document.getElementById("rapidCharacter").innerHTML = randomCharacter[characterType];
 
     if (characterType == 1) {
-      document.getElementById("instruction").innerHTML = "Which reading matches the following character?";
+      document.getElementById("rapidInstruction").innerHTML = "Which reading matches the following character?";
       characterType = 0;
     } else {
-      document.getElementById("instruction").innerHTML = "Which character has the following reading?";
+      document.getElementById("rapidInstruction").innerHTML = "Which character has the following reading?";
       characterType = 1;
     }
 
     this.correctAnswer = randomCharacter[characterType];
     choosable.splice(characterIndex,1);
 
-    var choices = document.getElementById("rapidExercise").children;
+    var choices = document.getElementById("rapidProblem").children;
     var randomChoices = [this.correctAnswer];
     choices = choices[choices.length - 1].children;
 
@@ -621,14 +714,15 @@ class KanaExercise {
     };
 
   }
+  //write() deals with phrase generation and displaying that.
   static write() {
     document.getElementById("writeProblem").style.display = "block";
     document.getElementById("writeProblem").children[0].innerHTML = "Type the romaji version of the highlighted word.";
     //select random sentence type
     if (!this.options.hiragana) {
-      var kanaIndex = 0;
-    } else if (!this.options.katakana) {
       var kanaIndex = 1;
+    } else if (!this.options.katakana) {
+      var kanaIndex = 0;
     } else {
       var kanaIndex = randNum(1);
     }
@@ -693,21 +787,14 @@ class KanaExercise {
       this.correctAnswer.push(randomSentence[i][1]);
     }
     wordParent.children[0].className = "currentWord"
-
-
-    //keep track of the romaji version of it (set it to correctAnswer)
-
-
-    //generate a random sentence then user will have to input romaji
-    //preferrably, while the user is typing, check green which ones were finished typed, and check yellow the word that the player is currently on
-    //after done, show which words were detected as mistakes
   }
+  //writeValidate() deals with confirming if the entered text is equal to the current word in the current write exercise.
   static writeValidate() {
     var input = document.getElementById("writeInput");
     var answer = input.value.toLowerCase();
 
-    if (KanaExercise.answer.length < KanaExercise.correctAnswer.length - 1) {
-      document.getElementById("wordParent").children[KanaExercise.answer.length + 1].className = "currentWord";
+    if (Exercise.answer.length < Exercise.correctAnswer.length - 1) {
+      document.getElementById("wordParent").children[Exercise.answer.length + 1].className = "currentWord";
     }
 
     this.answer.push(answer);
@@ -730,6 +817,7 @@ class KanaExercise {
 
     input.value = "";
   }
+  //verifyOu() accepts two strings and returns true if the strings are exactly the same except for the ou and oo parts. eg. "bouze" and "booze" return true, "bour" and "boo" return false, "a" and "b" return false. basically a more complex == that ignores ous and oos
   static verifyOu(text,comparison) {
     text = [text.toLowerCase().split("oo"),text.toLowerCase().split("ou")];
     comparison = [comparison.toLowerCase().split("ou"),comparison.toLowerCase().split("oo")];
@@ -743,5 +831,29 @@ class KanaExercise {
       }
     }
     return equal[0] || equal[1];
+  }
+  //kanji() generates a kanji exercise and displays it
+  static kanji() {
+    document.getElementById("kanjiProblem").style.display = "block";
+    //determine which type of exercise it will be
+
+    //get kana index
+    if (!this.options.hiragana) {
+      var kanaIndex = 0;
+    } else if (!this.options.katakana) {
+      var kanaIndex = 1;
+    } else {
+      var kanaIndex = randNum(randomCharacter.length - 1);
+    }
+    //pick random word from kanji list
+    var word = wordList[randNum(wordList.length - 1)];
+    console.log(word);
+
+
+  }
+  //kanjiValidate() is similar to rapidValidate() but confirms for kanji() instead
+  static kanjiValidate(answer) {
+    console.log(answer);
+    this.answer.push(answer);
   }
 }

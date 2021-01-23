@@ -227,7 +227,7 @@ Homepage
   text-decoration:underline;
 }
 .warning {
-  color:red;
+  color:rgb(220,0,0);
 }
 .smallText {
   color:rgb(100,100,100);
