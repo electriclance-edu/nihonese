@@ -1,6 +1,9 @@
 /*
 Homepage
 */
+h2 {
+  text-align:center;
+}
 .sectionOne {
   position:relative;
   height:calc(100vh - 50px);
@@ -57,6 +60,7 @@ Homepage
   border-bottom:10px solid transparent;
   border-right:10px solid transparent;
   position:absolute;
+  z-index:-10;
 }
 .bgBlue {
   border-left-color:rgb(65,190,230);
@@ -119,9 +123,6 @@ Homepage
   right:0;
   top:0;
   position:absolute;
-}
-.sectionTwo .textParent h2 {
-  text-align:center;
 }
 .sectionThree {
   position:relative;

@@ -20,8 +20,16 @@ function onloadPage2() {
   document.addEventListener("keypress", function(event) {
     if (parseInt(event.key) < 6 && Exercise.currentProblem.type == "rapid") {
       document.getElementById("rapidProblem").children[document.getElementById("rapidProblem").children.length - 1].children[event.key - 1].click();
-    } else if (parseInt(event.key) < 6 && Exercise.currentProblem.type == "kanji") {
-      document.getElementById("kanjiProblem").children[document.getElementById("kanjiProblem").children.length - 1].children[event.key - 1].click();
+    } else if (Exercise.currentProblem.type == "kanji") {
+      if (Exercise.kanjiProblemType == "input") {
+        if (event.code == "Space" || event.code == "Enter") {
+          Exercise.kanjiValidate(document.getElementById("kanjiInput").value);
+        } else {
+          document.getElementById("kanjiInput").focus();
+        }
+      } else if (parseInt(event.key) < 6) {
+        document.getElementById("kanjiChoices").children[event.key - 1].click();
+      }
     } else if (Exercise.currentProblem.type == "write") {
       if (event.code == "Space" || event.code == "Enter") {
         //terrible bit of code that is completely tied to Exercise.writeValidate() and really should just be there
@@ -69,19 +77,25 @@ function softToggle(id) {
 function toggleExclusive(id) {
   element = document.getElementById(id);
   if (id == currentEnabled) {
-    element.style.display = "none";
+    element.style.opacity = "0";
     element.style.pointerEvents = "none";
+    document.getElementById("leftSide").style.width = "100%";
+    document.getElementById("rightSide").style.right = "-50%";
     currentEnabled = "";
   } else if (currentEnabled == "") {
-    element.style.display = "block";
+    element.style.opacity = "1";
     element.style.pointerEvents = "all";
     currentEnabled = id;
+    document.getElementById("leftSide").style.width = "50%";
+    document.getElementById("rightSide").style.right = "0";
   } else {
-    element.style.display = "block";
+    element.style.opacity = "1";
     element.style.pointerEvents = "all";
-    document.getElementById(currentEnabled).style.display = "none";
+    document.getElementById(currentEnabled).style.opacity = "0";
     document.getElementById(currentEnabled).style.pointerEvents = "none";
     currentEnabled = id;
+    document.getElementById("leftSide").style.width = "50%";
+    document.getElementById("rightSide").style.right = "0";
   }
 }
 function onload404() {
@@ -201,12 +215,9 @@ function processWords() {
       reading:rawWordObject[1],
       politeForm:rawWordObject[2],
       meaning:rawWordObject[3],
-      meaningTwo:rawWordObject[4],
       wordType:rawWordObject[5],
-      note:rawWordObject[6],
       romaji:rawWordObject[8],
       katakanaReading:rawWordObject[9],
-      kanaOnly:rawWordObject[10]
     }
     var index = -1;
     for (var j = 0; j < wordTypes.length; j += 2) {
@@ -426,6 +437,7 @@ class Exercise {
       hiragana:true,
       katakana:true,
       rapidRomaji:true,
+      kanjiRomaji:false,
       rapid:{type:"rapid",enabled:false,chance:60},
       write:{type:"write",enabled:false,chance:20},
       kanji:{
@@ -438,8 +450,8 @@ class Exercise {
           reading:2,
           type:3
         },
-        prompt:[true,true,true,true],
-        option:[true,true,true,true]
+        prompt:[true,true,false,false],
+        option:[true,true,true,false]
       }
     }
     this.characterList = [[...characterData.katakana],[...characterData.hiragana]];
@@ -453,13 +465,13 @@ class Exercise {
         }
       }
     }
-    this.wordList = [...wordList];
     var ratios = document.getElementsByClassName("ratio");
     for (var i = 0; i < ratios.length; i++) {
       ratios[i].addEventListener("input", function (e) {
         Exercise.updatePercentage(this);
       });
     }
+    this.currentProblem = "none";
   }
   //problem() deals with elements that activate or disable problemTypes.
   static problem(element) {
@@ -648,7 +660,7 @@ class Exercise {
   }
   //rapid() deals with choice and prompt generation for the rapid exercises, along with displaying them
   static rapid() {
-    documents.getElementById("rapidProblem").style.display = "block";
+    document.getElementById("rapidProblem").style.display = "block";
     var randomCharacter = this.characterList;
     if (!this.options.hiragana) {
       var kanaIndex = 0;
@@ -835,25 +847,106 @@ class Exercise {
   //kanji() generates a kanji exercise and displays it
   static kanji() {
     document.getElementById("kanjiProblem").style.display = "block";
-    //determine which type of exercise it will be
-
+    document.getElementById("kanjiInput").value = "";
+    document.getElementById("kanjiPrompt").parentElement.style.backgroundColor = "rgb(255,255,255)";
     //get kana index
     if (!this.options.hiragana) {
-      var kanaIndex = 0;
+      var kanaIndex = 0; //katakana
     } else if (!this.options.katakana) {
-      var kanaIndex = 1;
+      var kanaIndex = 1; //hiragana
     } else {
-      var kanaIndex = randNum(randomCharacter.length - 1);
+      var kanaIndex = randNum(1);
     }
-    //pick random word from kanji list
-    var word = wordList[randNum(wordList.length - 1)];
-    console.log(word);
+    //pick prompt type
+    var prompt = [];
+    for (var i = 0; i < this.options.kanji.prompt.length; i++) {
+      if (this.options.kanji.prompt[i]) {
+        prompt.push(i);
+      }
+    }
+    prompt = prompt[randNum(prompt.length - 1)];
+    //pick option type
+    var option = [];
+    for (var i = 0; i < this.options.kanji.option.length; i++) {
+      if (this.options.kanji.option[i] && i != prompt) {
+        option.push(i);
+      }
+    }
+    var key = ["kanji","meaning","romaji","wordType"]; //object properties that correspond to each type
+    option = key[option[randNum(option.length - 1)]];
+    if (this.options.kanjiRomaji) {
+      key[2] = "romaji";
+    } else {
+      key[2] = ["katakanaReading","reading"][randNum(1)];
+    }
+    var wordListCopy = [...wordList];
+    var randIndex = randNum(wordList.length - 1);
+    var word = wordListCopy[randIndex];
+    wordListCopy.splice(randIndex,1);
+    prompt = word[key[prompt]];
+    this.correctAnswer = word[option];
 
+    var instruction = {
+      kanji:"Which kanji matches the following prompt?",
+      meaning:"Which meaning matches the following prompt?",
+      romaji:"Type the pronunciation that matches the following prompt.",
+      wordType:"What word type matches the following prompt?"
+    }
+    instruction = instruction[option];
+    document.getElementById("kanjiInstruction").innerHTML = instruction;
 
+    if (option == "romaji") {
+      document.getElementById("kanjiChoices").style.display = "none";
+      document.getElementById("kanjiInput").style.display = "block";
+      this.kanjiProblemType = "input";
+    } else {
+      document.getElementById("kanjiChoices").style.display = "block";
+      document.getElementById("kanjiInput").style.display = "none";
+      this.kanjiProblemType = "";
+    }
+
+    var options = [word[option]];
+    for (var i = 0; i < 4; i++) {
+      randIndex = randNum(wordListCopy.length - 1);
+      options.push(wordListCopy[randIndex][option]);
+      wordListCopy.splice(randIndex,1);
+    }
+    options = shuffleArray(options);
+
+    var optionElements = document.getElementById("kanjiChoices").children;
+    for (var i = 0; i < 5; i++) {
+      optionElements[i].children[0].innerHTML = options[i];
+    }
+
+    document.getElementById("kanjiPrompt").innerHTML = prompt;
   }
-  //kanjiValidate() is similar to rapidValidate() but confirms for kanji() instead
+  //kanjiValidate() is similar to rapidValidate() but validates kanji answers instead instead
   static kanjiValidate(answer) {
-    console.log(answer);
-    this.answer.push(answer);
+    if (this.verifyOu(answer,this.correctAnswer) || answer == this.correctAnswer) {
+      clearTimeout(this.timeout);
+      document.getElementById("problemParent").style.backgroundColor = "rgba(115,255,15,0.3)";
+      this.answers.push({
+        correct:true,
+        answered:answer,
+        trueAnswer:this.correctAnswer,
+        problemType:this.currentProblem
+      });
+      this.randomProblem();
+    } else {
+      console.log(answer);
+      console.log(this.correctAnswer);
+      clearTimeout(this.timeout);
+      document.getElementById("problemParent").style.backgroundColor = "rgba(255,60,60,0.3)";
+      this.answers.push({
+        correct:false,
+        answered:answer,
+        trueAnswer:this.correctAnswer,
+        problemType:this.currentProblem
+      });
+      this.randomProblem();
+    }
+    this.timeout = setTimeout(function(){
+      document.getElementById("problemParent").style.backgroundColor = "";
+    },300);
   }
 }
