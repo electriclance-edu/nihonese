@@ -3,9 +3,24 @@
     margin-left:10px !important;
   }
 }
-@media screen and (max-width:344px) {
-  .multipleChoiceProblem .choices .clickable:first-child {
-    margin-left:10px !important;
+@media screen and (max-width:560px) {
+  #leftSide {
+    height:initial !important;
+  }
+  #leftSide .centerer {
+    top:0 !important;
+    transform:translate(0%,0%) !important;
+    position:relative !important;
+    left:0 !important;
+    margin-left:auto;
+    margin-right:auto;
+  }
+  .adjust {
+    display:inline-block !important;
+    width:100% !important;
+    position:relative !important;
+    float:left !important;
+    height:auto;
   }
 }
 body {
@@ -19,9 +34,6 @@ body {
 }
 * {
   text-align:center;
-}
-h2 {
-  color:rgb(100,100,100);
 }
 .clickable {
   position:relative;

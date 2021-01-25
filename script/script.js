@@ -81,6 +81,8 @@ function toggleExclusive(id) {
     element.style.pointerEvents = "none";
     document.getElementById("leftSide").style.width = "100%";
     document.getElementById("rightSide").style.right = "-50%";
+    document.getElementById("leftSide").className = "";
+    document.getElementById("rightSide").className = "";
     currentEnabled = "";
   } else if (currentEnabled == "") {
     element.style.opacity = "1";
@@ -88,6 +90,8 @@ function toggleExclusive(id) {
     currentEnabled = id;
     document.getElementById("leftSide").style.width = "50%";
     document.getElementById("rightSide").style.right = "0";
+    document.getElementById("leftSide").className = "adjust";
+    document.getElementById("rightSide").className = "adjust";
   } else {
     element.style.opacity = "1";
     element.style.pointerEvents = "all";
@@ -96,6 +100,8 @@ function toggleExclusive(id) {
     currentEnabled = id;
     document.getElementById("leftSide").style.width = "50%";
     document.getElementById("rightSide").style.right = "0";
+    document.getElementById("leftSide").className = "adjust";
+    document.getElementById("rightSide").className = "adjust";
   }
 }
 function onload404() {
@@ -213,11 +219,10 @@ function processWords() {
     var wordObject = {
       kanji:rawWordObject[0],
       reading:rawWordObject[1],
-      politeForm:rawWordObject[2],
-      meaning:rawWordObject[3],
-      wordType:rawWordObject[5],
-      romaji:rawWordObject[8],
-      katakanaReading:rawWordObject[9],
+      meaning:rawWordObject[2],
+      wordType:rawWordObject[3],
+      romaji:rawWordObject[4],
+      katakanaReading:rawWordObject[5],
     }
     var index = -1;
     for (var j = 0; j < wordTypes.length; j += 2) {

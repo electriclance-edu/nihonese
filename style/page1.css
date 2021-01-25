@@ -1,3 +1,16 @@
+@media screen and (max-width:1000px) {
+  .sectionTwo .chartParent, .sectionThree .chartParent {
+    margin-left:0 !important;
+    margin-right:0 !important;
+    margin-top:280px; !important;
+    width:100% !important;
+  }
+  .sectionTwo .textParent, .sectionThree .textParent {
+    width:100% !important;
+    height:320px !important;
+    float:none !important;
+  }
+}
 .popup p:first-child:hover {
   background-color:rgb(240,240,240);
 }
@@ -48,6 +61,7 @@
   height:100%;
   position:absolute;
   text-align:center;
+  transition:0.5s;
 }
 .sectionTwo .textParent {
   float:left;
@@ -60,6 +74,7 @@
   width:calc(70% - 20px);
   padding:20px;
   float:left;
+  transition:0.5s;
 }
 .sectionTwo .chartParent {
   margin-left:30%;
@@ -73,7 +88,7 @@
   line-height:100px;
   border:2px solid rgb(240,240,240);
   background-color:rgb(255,255,255);
-  display:block;
+  display:inline-block;
   white-space:nowrap;
 }
 .characterSyllable {
