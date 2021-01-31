@@ -1,4 +1,4 @@
-@media screen and (max-width:700px) {
+@media screen and (max-width:840px) {
   .redirect a {
     font-size:0;
   }
@@ -11,6 +11,19 @@
   .redirectMenuHoverer .redirectMenuParent {
     opacity:0;
     top:-150px;
+  }
+  .redirectMenuHoverer:hover .redirectMenuParent {
+    opacity:0 !important;
+    top:-150px !important;
+  }
+}
+@media screen and (max-width:440px) {
+  #logo {
+    opacity:0;
+  }
+  .redirectParent {
+    left:0;
+    right:initial;
   }
 }
 html {
@@ -25,7 +38,7 @@ body {
   background-position:center;
   color:rgb(50,50,50);
 }
-p,h1,h2,li,td,th,input {
+p,h1,h2,li,td,th,input,span,h3 {
   font-family: 'Poppins','Noto Sans JP',sans-serif;
   margin:0;
   transition:0.3s;
@@ -57,9 +70,13 @@ a {
   margin:0;
   color:rgb(100,100,100);
   transition:0.5s;
+  text-decoration:none;
 }
 a:hover {
   color:rgb(50,50,50);
+}
+#logo {
+  transition:0.3s;
 }
 .redirect a img {
   opacity:0;
@@ -126,17 +143,17 @@ Homepage
 .selectedRedirect {
   background-color:rgb(240,240,240);
 }
-.selectedRedirect p {
+.selectedRedirect > a {
   text-decoration:none;
 }
 .redirectMenuParent {
   height:150px;
   width:150px;
   position:absolute;
+  opacity:0;
   top:-150px;
   transition:0.3s;
   z-index:-100;
-  opacity:0;
   position:relative;
   border-bottom-left-radius:10px;
   border-bottom-right-radius:10px;

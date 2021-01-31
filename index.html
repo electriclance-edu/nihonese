@@ -18,7 +18,7 @@
     <div class="toolbar">
       <a href="index.html"><img src="images/logo.png" alt="" id="logo"></a>
       <div class="redirectParent" id="redirectParent">
-        <div class="redirect">
+        <div class="selectedRedirect redirect">
           <a href="index.html">Homepage<img src="images/homeIcon.png" alt=""></a>
         </div>
         <div class="redirectMenuHoverer redirect">
@@ -35,16 +35,11 @@
             </div>
           </div>
         </div>
-        <div class="selectedRedirect redirectMenuHoverer redirect">
-          <a href="index.html#sectionThree">Exercises<img src="images/exerciseIcon.png" alt=""></a>
-          <div class="redirectMenuParent">
-            <div class="redirect">
-              <a href="htdocs/page2.html" class="">Kana</a>
-            </div>
-            <div class="redirect">
-              <a href="htdocs/page3.html" class="">Kanji</a>
-            </div>
-          </div>
+        <div class="redirect">
+          <a href="htdocs/page2.html">Exercises<img src="images/exerciseIcon.png" alt=""></a>
+        </div>
+        <div class="redirect">
+          <a href="htdocs/page3.html">About<img src="images/aboutIcon.png" alt=""></a>
         </div>
       </div>
     </div>
@@ -60,12 +55,21 @@
           <img src="images/woobler.png" alt="cloudImage" id="greenCloudImage">
         </div>
       </div>
-      <div class="sectionTwoPointFive">
+      <div class="sectionOnePointFive">
         <div class="centerer">
-          <h2>About</h2>
+          <h2>What is Nihonese?</h2>
           <p>Nihonese is an informal japanese guide meant to help people learning Japanese. Start out your learning journey with the Reference Sheet for Hiragana and Katakana, or practice your writing and reading with the exercises!</p>
           <br>
           <p>If you need them, any used references are available at the bottom of each page.</p>
+          <br>
+          <p>Go to the about page for studying material reccomendations and a more detailed rundown of the website!</p>
+          <div class="horizontalCenterer">
+            <a href="htdocs/page3.html">
+              <div class="clickable">
+                <p>Go to the About Page</p>
+              </div>
+            </a>
+          </div>
           <br>
           <p>Also, pretty please try out the exercises.</p>
         </div>
@@ -94,22 +98,13 @@
         </div>
       </div>
       <div class="sectionThree" id="sectionThree">
-        <div class="headerContainer">
-          <div class="centerer">
-            <h2>Writing Exercises</h2>
-            <p>Practice your writing with exercises ranging from simple to not so very difficult!</p>
-            <br>
-            <p class="smallText">Click one below to go to their exercise page!</p>
-          </div>
-        </div>
-        <div class="exerciseContainer">
-          <a class="exercise exerciseKana clickable" href="htdocs/page2.html">
-            <div class="centerer">
-              <h2>Kana Exercises</h2>
-              <div class="icon">
-                <p>仮名</p>
-              </div>
-              <br>
+        <div class="centerer">
+          <h2>Japanese Exercises</h2>
+          <p>Practice your japanese with exercises geared to reading speed and vocabulary!</p>
+          <br>
+          <a href="htdocs/page2.html">
+            <div class="clickable">
+              <p>Go to the Exercise Page</p>
             </div>
           </a>
         </div>

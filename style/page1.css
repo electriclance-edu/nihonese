@@ -42,6 +42,9 @@
 .sectionOne .smallText {
   text-align:right;
 }
+.sectionOne .textParent h2 {
+  text-align:center;
+}
 .sectionTwo {
   position:relative;
   width:100%;

@@ -3,7 +3,32 @@
     margin-left:10px !important;
   }
 }
+@media screen and (max-width:512px) {
+  .overallScore .leftSide {
+  }
+  .overallScore .rightSide {
+    line-height:50px !important;
+    height:50px !important;
+    top:0px !important;
+    padding-left:0 !important;
+    display:block !important;
+  }
+  .overallScore p {
+    top:0 !important;
+  }
+}
+@media screen and (max-width:650px) {
+  .kanaBreakdown, .kanjiBreakdown {
+    width:100% !important;
+  }
+  .box {
+    display:inline-block;
+  }
+}
 @media screen and (max-width:560px) {
+  #rightSide {
+    overflow-y:initial !important;
+  }
   #leftSide {
     height:initial !important;
   }
@@ -151,6 +176,7 @@ body {
   top:0px;
   right:-50%;
   transition:0.5s;
+  overflow-y:scroll;
 }
 #leftSide {
   width:100%;
@@ -189,7 +215,7 @@ body {
 .multipleChoiceProblem .choices .clickable {
   display:inline-block;
   padding-left:30px;
-  padding-right:30px;
+  padding-right:15px;
   margin-left:10px;
   padding-top:5px;
   padding-bottom:5px;
@@ -201,7 +227,7 @@ body {
   position:absolute;
   top:50%;
   transform:translatey(-50%);
-  left:5px;
+  left:7.5px;
   height:15px;
   width:15px;
   line-height:15px;
@@ -291,4 +317,156 @@ body #writeProblem .currentWord {
 #writeInput:focus,#kanjiInput:focus {
   outline:0;
   border:1px solid rgb(80,180,10);
+}
+.scoresParent {
+  width:100%;
+  position:absolute;
+  top:70px;
+  left:0;
+  padding-bottom:70px;
+  opacity:0;
+  pointer-events:none;
+}
+.overallScore {
+  width:100%;
+  position:relative;
+}
+.overallScore * {
+  transition:0s;
+}
+.overallScore .centerer {
+  text-align:center;
+  width:100%;
+  height:10px;
+}
+.overallScore .leftSide,.overallScore .rightSide {
+  display:inline-block;
+  height:156.8px;
+  position:relative;
+}
+.overallScore .circleBorder {
+  width:120px;
+  height:120px;
+  border-radius:100px;
+  border:10px solid rgb(15,185,200);
+  display:inline-block;
+  padding-top:10px;
+  box-sizing:border-box;
+}
+.overallScore .rightSide {
+  line-height:120px;
+  padding-left:20px;
+  top:-70px;
+}
+.overallScore p {
+  position:relative;
+  top:-50px;
+}
+.breakdownParent {
+  width:100%;
+}
+.kanaBreakdown, .kanjiBreakdown {
+  width:50%;
+  display:inline-block;
+  float:left;
+}
+.kanaBreakdown p, .kanjiBreakdown p {
+  display:inline-block;
+}
+.kanaBreakdown p span, .kanjiBreakdown p span {
+  color:rgb(100,100,100);
+}
+.kanaBreakdown .specialAdjust {
+  display:block;
+  margin-bottom:5px;
+}
+.problemBreakdown, .analysis {
+  width:100%;
+  display:inline-block;
+}
+.problemMistakes {
+  border-radius:10px;
+  margin-top:5px;
+  border-spacing:0 5px;
+  padding:5px 10px 5px 10px;
+  border-collapse:separate;
+  display:inline-block;
+}
+.problemMistakes tr {
+  margin-top:10px;
+}
+.problemMistakes tr td:first-child {
+  border-top-left-radius:10px;
+  border-bottom-left-radius:10px;
+}
+.problemMistakes tr td:nth-child(2) {
+  background-color:rgba(115,255,15,0.3);
+}
+.problemMistakes tr td:last-child {
+  background-color:rgba(255,60,60,0.3);
+  border-top-right-radius:10px;
+  border-bottom-right-radius:10px;
+}
+#exerciseProgressBar {
+  width:100%;
+  position:absolute;
+  top:0;
+  left:0;
+  margin-left:0;
+}
+.progressBar {
+  position:relative;
+  display:inline-block;
+  width:150px;
+  height:10px;
+  background-color:rgb(230,230,230);
+  border-radius:10px;
+  margin-left:10px;
+  border-radius:0;
+}
+.progressBar > div {
+  width:0%;
+  height:100%;
+  position:absolute;
+  top:0;
+  left:0;
+  border-radius:20px;
+  background-color:rgb(15,185,200);
+  transition:0.5s;
+}
+.progressBar span {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:10px;
+  margin-top:0.5px;
+  color:rgb(255,255,255);
+}
+.box {
+  border-radius:20px;
+  background-color:rgb(255,255,255);
+  box-shadow:2px 4px 10px rgb(220,220,220);
+  margin:0px 10px 10px 10px;
+  display:block;
+  padding:0px 40px;
+}
+.invertedBox {
+  border-radius:20px;
+  background-color:rgb(245,245,245);
+  padding:5px 15px 5px 15px;
+  display:inline-block;
+  width:100%;
+  margin-bottom:10px;
+}
+.childCenterer {
+  display:inline-block;
+}
+.childCenterer > * {
+  position:relative;
+  left:50%;
+  transform:translateX(-50%);
+}
+.bold {
+  font-weight:bold;
 }
