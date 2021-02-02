@@ -160,20 +160,20 @@
               </div>
               <div class="clickableOption clickable unchosen" id="kanjiRomaji" onclick="Exercise.option(this)">
                 <div class="circle"></div>
-                <p><span>Enable</span> Only Romaji Readings (Kanji)</p>
+                <p><span>Enable</span> Romaji Only for Kanji Readings</p>
               </div>
             </div>
             <div id="exerciseRatiosParent">
               <p class="smallText">If you ran the exercise <span id="total">100</span> times, the amount of times each exercise that appeared would roughly be:</h2>
               <div class="exerciseRatios">
                 <div id="chanceRapid">
-                  <h2>Rapid: </h2> <input type="text" value="70" class="ratio"> <br>
+                  <h2>Rapid: </h2> <input type="text" value="" class="ratio"> <br>
                 </div>
                 <div id="chanceWrite">
-                  <h2>Write: </h2> <input type="text" value="30" class="ratio">
+                  <h2>Write: </h2> <input type="text" value="" class="ratio">
                 </div>
                 <div id="chanceKanji">
-                  <h2>Kanji: </h2> <input type="text" value="30" class="ratio">
+                  <h2>Kanji: </h2> <input type="text" value="" class="ratio">
                 </div>
                 <p>(you can modify these)</p>
               </div>
@@ -185,6 +185,9 @@
     <div class="problemParent" id="problemParent">
       <div class="progressBar" id="exerciseProgressBar">
         <div></div>
+      </div>
+      <div class="clickable endExercise" onclick="this.children[0].innerHTML = 'Finish this last problem.'; Exercise.leftoverExercises = 0;">
+        <p>End the exercise.</p>
       </div>
       <div id="rapidProblem" class="centerer multipleChoiceProblem">
         <p id="rapidInstruction">...</p>
@@ -257,13 +260,13 @@
       <div class="overallScore">
           <div class="leftSide">
             <div class="circleBorder">
-              <h1>A+</h1>
+              <h1 id="scoreGrade">A+</h1>
             </div>
-            <h2>17/385</h2>
-            <div class="progressBar" id="kanaAccuracy"><div></div><span>0%</span></div>
+            <h2 id="overallScore">17/385</h2>
+            <div class="progressBar" id="overallAccuracy"><div></div><span>0%</span></div>
           </div>
           <div class="rightSide">
-            <h1>Great score!</h1>
+            <h1 id="scoreComment">Great score!</h1>
           </div>
           <p>Here's a more detailed breakdown:</p>
       </div>
@@ -274,13 +277,13 @@
               <h2>Kana</h2>
               <div class="invertedBox">
                 <p>Overall Accuracy: </p> <div class="progressBar" id="kanaAccuracy"><div></div><span>0%</span></div> <br>
-                <p>Hiragana Accuracy: </p> <div class="progressBar" id="katakanaAccuracy"><div></div><span>0%</span></div> <br>
-                <p>Katakana Accuracy: </p> <div class="progressBar" id="hiraganaAccuracy"><div></div><span>0%</span></div>
+                <p>Katakana Accuracy: </p> <div class="progressBar" id="katakanaAccuracy"><div></div><span>0%</span></div> <br>
+                <p>Hiragana Accuracy: </p> <div class="progressBar" id="hiraganaAccuracy"><div></div><span>0%</span></div>
               </div> <br>
               <div class="invertedBox">
-                <p id="kanaStrongestExercise">Strongest Exercise: <span>Rapid</span></p>
+                <p>Strongest Kana: <span id="kanaStrongestKana">Katakana</span></p> <br>
+                <p>Strongest Character Type: <span id="kanaStrongestExercise">Rapid</span></p>
                 <br>
-                <p id="kanaStrongestKana">Strongest Kana: <span>Katakana</span></p> <br>
               </div>
             </div>
           </div>
@@ -290,8 +293,8 @@
               <p class="smallText specialAdjust">ex: きゃ (compound), ぎ (alternate), き (normal)</p>
               <div class="invertedBox">
                 <p>Compound: </p> <div class="progressBar" id="compoundAccuracy"><div></div><span>0%</span></div> <br>
-                <p>Alternate: </p> <div class="progressBar" id="hiraganaAccuracy"><div></div><span>0%</span></div> <br>
-                <p>Normal: </p> <div class="progressBar" id="hiraganaAccuracy"><div></div><span>0%</span></div> <br>
+                <p>Alternate: </p> <div class="progressBar" id="alternateAccuracy"><div></div><span>0%</span></div> <br>
+                <p>Normal: </p> <div class="progressBar" id="normalAccuracy"><div></div><span>0%</span></div> <br>
               </div>
             </div>
           </div>
@@ -301,7 +304,7 @@
             <div class="childCenterer">
               <h2>Kanji</h2>
               <div class="invertedBox">
-                <p>Overall Accuracy: </p> <div class="progressBar" id="kanjiAccuracy"><div></div><span>0%</span></div> <br>
+                <p>Overall Accuracy: </p> <div class="progressBar" id="overallKanjiAccuracy"><div></div><span>0%</span></div> <br>
               </div> <br>
               <div class="invertedBox">
                 <p id="kanjiStrongestPrompt">Strongest Property (prompt): <span>Meaning</span></p> <br>
@@ -326,14 +329,10 @@
           <table class="problemMistakes" id="problemMistakes">
             <tr>
               <td>Problem</td>
+              <td>Prompt</td>
               <td>Correct Answer</td>
               <td>Answered</td>
             </tr>
-              <tr>
-                <td>Problem</td>
-                <td>Correct Answer</td>
-                <td>Answered</td>
-              </tr>
           </table>
         </div>
       </div>

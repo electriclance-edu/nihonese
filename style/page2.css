@@ -50,6 +50,7 @@
 }
 body {
   width:100vw;
+  overflow:hidden;
 }
 .sectionOne {
   min-height:calc(100vh - 50px);
@@ -196,6 +197,15 @@ body {
   height:calc(100vh - 50px);
   overflow-y:scroll;
 }
+.endExercise {
+  position:absolute;
+  top:10px;
+  left:10px;
+  padding:5px 10px 5px 10px;
+}
+.endExercise:hover {
+  top:5px;
+}
 .multipleChoiceProblem,#writeProblem,#kanjiProblem {
   transition:0.3s;
 }
@@ -323,9 +333,11 @@ body #writeProblem .currentWord {
   position:absolute;
   top:70px;
   left:0;
-  padding-bottom:70px;
   opacity:0;
   pointer-events:none;
+  overflow-y:scroll;
+  z-index:100;
+  height:100vh;
 }
 .overallScore {
   width:100%;
@@ -383,6 +395,7 @@ body #writeProblem .currentWord {
 .problemBreakdown, .analysis {
   width:100%;
   display:inline-block;
+  padding-bottom:100px;
 }
 .problemMistakes {
   border-radius:10px;
@@ -399,7 +412,7 @@ body #writeProblem .currentWord {
   border-top-left-radius:10px;
   border-bottom-left-radius:10px;
 }
-.problemMistakes tr td:nth-child(2) {
+.problemMistakes tr td:nth-child(3) {
   background-color:rgba(115,255,15,0.3);
 }
 .problemMistakes tr td:last-child {
@@ -441,7 +454,6 @@ body #writeProblem .currentWord {
   transform:translate(-50%,-50%);
   font-size:10px;
   margin-top:0.5px;
-  color:rgb(255,255,255);
 }
 .box {
   border-radius:20px;

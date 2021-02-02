@@ -456,7 +456,11 @@ class Exercise {
       }
     }
     this.statistics = {
+      currentKana:"",
       katakana:{
+        total:0,
+        mistakes:0,
+        currentType:"",
         compound:{
           total:0,
           mistakes:0
@@ -471,6 +475,9 @@ class Exercise {
         }
       },
       hiragana:{
+        total:0,
+        mistakes:0,
+        currentType:"",
         compound:{
           total:0,
           mistakes:0
@@ -485,18 +492,35 @@ class Exercise {
         }
       },
       kanji:{
-        currentType:"",
-        kanji:{
-          total:0,
-          mistakes:0
+        prompt:{
+          currentType:"",
+          kanji:{
+            total:0,
+            mistakes:0
+          },
+          meaning:{
+            total:0,
+            mistakes:0
+          },
+          reading:{
+            total:0,
+            mistakes:0
+          }
         },
-        meaning:{
-          total:0,
-          mistakes:0
-        },
-        reading:{
-          total:0,
-          mistakes:0
+        option:{
+          currentType:"",
+          kanji:{
+            total:0,
+            mistakes:0
+          },
+          meaning:{
+            total:0,
+            mistakes:0
+          },
+          reading:{
+            total:0,
+            mistakes:0
+          }
         }
       },
       problemScore:{
@@ -543,10 +567,6 @@ class Exercise {
   }
   //reloadOptions() reloads all the option graphics so they fit to whatever data this.options contains
   static reloadOptions() {
-    var problemElements = document.getElementById("exerciseTypes").children;
-    for (var i = 0; i < problemElements.length; i++) {
-      this.problem(problemElements[i],true);
-    }
     var optionElements = document.getElementById("exerciseOptions").children;
     for (var i = 0; i < optionElements.length; i++) {
       this.option(optionElements[i],true);
@@ -558,6 +578,15 @@ class Exercise {
     var kanjiOptionElements = document.getElementById("kanjiOptions").children;
     for (var i = 0; i < kanjiOptionElements.length; i++) {
       this.kanjiOption(kanjiOptionElements[i],'option',true);
+    }
+    var chanceElements = document.getElementsByClassName("ratio");
+    for (var i = 0; i < chanceElements.length; i++) {
+      chanceElements[i].value = this.options[chanceElements[i].parentElement.id.substring(6).toLowerCase()].chance;
+      this.updatePercentage(chanceElements[i],true);
+    }
+    var problemElements = document.getElementById("exerciseTypes").children;
+    for (var i = 0; i < problemElements.length; i++) {
+      this.problem(problemElements[i],true);
     }
   }
   //problem() deals with elements that activate or disable problemTypes.
@@ -593,14 +622,16 @@ class Exercise {
     }
   }
   //updatePercentage() deals with the percentage inputs and verifies if they're good or not.
-  static updatePercentage(element) {
+  static updatePercentage(element,skip = false) {
     if (isNaN(element.value) || parseInt(element.value) <= 0) {
       element.style.backgroundColor = "rgba(255,0,0,0.3)";
       this.options[element.parentElement.id.substring(6).toLowerCase()].chance = "invalid";
       return 0;
     }
     element.style.backgroundColor = "";
-    this.options[element.parentElement.id.substring(6).toLowerCase()].chance = element.value;
+    if (!skip) {
+      this.options[element.parentElement.id.substring(6).toLowerCase()].chance = element.value;
+    }
     var problemTypes = ["rapid","write","kanji"];
     var total = 0;
     var totalBlank = 0;
@@ -698,13 +729,18 @@ class Exercise {
       document.getElementById("problemParent").style.opacity = "1";
       document.getElementById("problemParent").style.pointerEvents = "all";
       this.leftoverExercises = this.options.exerciseLength;
+      if (this.leftoverExercises == -1) {
+        document.getElementById("exerciseProgressBar").children[0].style.width = "100%";
+      }
       this.randomProblem();
     }
   }
   //randomProblem() determines which problems can appear (aka those that are enabled in this.options) and chooses one with weightedRandom()
   static randomProblem() {
     if (this.leftoverExercises > 0 || this.leftoverExercises == -1) {
-      this.leftoverExercises--;
+      if (this.leftoverExercises > 0) {
+        this.leftoverExercises--;
+      }
       var problems = [];
       var probabilityArray = [];
       var problemTypes = ["rapid","write","kanji"]
@@ -714,17 +750,16 @@ class Exercise {
           probabilityArray.push(parseInt(problem.chance));
           problems.push(problem);
         }
-        console.log(problem);
       }
       this.currentProblem = problems[weightedRandom(probabilityArray)];
       var problemElements = document.getElementById("problemParent").children;
-      for (var i = 1; i < problemElements.length; i++) {
+      for (var i = 2; i < problemElements.length; i++) {
         problemElements[i].style.display = "none";
       }
       Exercise[this.currentProblem.type]();
     } else {
       var problemElements = document.getElementById("problemParent").children;
-      for (var i = 1; i < problemElements.length; i++) {
+      for (var i = 2; i < problemElements.length; i++) {
         problemElements[i].style.display = "none";
       }
       this.leftoverExercises--;
@@ -732,8 +767,14 @@ class Exercise {
       document.getElementById("problemParent").style.pointerEvents = "none";
       document.getElementById("scoresParent").style.opacity = "1";
       document.getElementById("scoresParent").style.pointerEvents = "all";
+      Exercise.currentProblem.type = "";
+      this.analyzeStatistics();
     }
-    document.getElementById("exerciseProgressBar").children[0].style.width = (this.options.exerciseLength - this.leftoverExercises - 1) / this.options.exerciseLength * 100 + "%";
+    if (this.leftoverExercises == -1) {
+      document.getElementById("exerciseProgressBar").children[0].style.width = "100%";
+    } else {
+      document.getElementById("exerciseProgressBar").children[0].style.width = (this.options.exerciseLength - this.leftoverExercises - 1) / this.options.exerciseLength * 100 + "%";
+    }
   }
   //rapidValidate() is used by the choice elements in the rapidProblem div, confirms if the answer given is correct, and starts a new problem if so
   static rapidValidate(answer) {
@@ -744,7 +785,8 @@ class Exercise {
     } else {
       clearTimeout(this.timeout);
       document.getElementById("problemParent").style.backgroundColor = "rgba(255,60,60,0.3)";
-      this.createMistakeElement(this.currentProblem,this.correctAnswer,answer);
+      this.createMistakeElement("Rapid",this.correctAnswer,answer);
+      this.statistics[this.statistics.currentKana][this.statistics[this.statistics.currentKana].currentType].mistakes++;
       this.randomProblem();
     }
     this.timeout = setTimeout(function(){
@@ -765,6 +807,9 @@ class Exercise {
 
     randomCharacter = randomCharacter[kanaIndex];
     var familyIndex = randNum(randomCharacter.length - 1);
+    this.statistics.currentKana = ["katakana","hiragana"][kanaIndex];
+    this.statistics[this.statistics.currentKana].currentType = ["normal","compound","alternate","compound"][familyIndex];
+    this.statistics[this.statistics.currentKana][this.statistics[this.statistics.currentKana].currentType].total++;
     randomCharacter = randomCharacter[familyIndex];
     var characterIndex = randNum(randomCharacter.length - 1);
     var choosable = [...this.characterList[kanaIndex][familyIndex]];
@@ -775,6 +820,7 @@ class Exercise {
     }
     randomCharacter = randomCharacter[characterIndex];
     document.getElementById("rapidCharacter").innerHTML = randomCharacter[characterType];
+    this.prompt = randomCharacter[characterType];
 
     if (characterType == 1) {
       document.getElementById("rapidInstruction").innerHTML = "Which reading matches the following character?";
@@ -879,6 +925,8 @@ class Exercise {
         }
         randomSentence[i] = reference;
       }
+      this.statistics.currentKana = ["katakana","hiragana"][kanaIndex];
+      this.statistics[this.statistics.currentKana].total++;
     }
     this.correctAnswer = [];
     this.answer = [];
@@ -912,6 +960,7 @@ class Exercise {
       } else {
         var wordParent = document.getElementById("wordParent");
         wordParent.children[this.answer.length - 1].className = "failedWord uncurrent";
+        this.prompt = wordParent.children[this.answer.length - 1].innerHTML;
         wordParent.className = "wordParent expandedParent";
 
         var trueAnswer = document.createElement("p");
@@ -919,6 +968,7 @@ class Exercise {
         wordParent.children[this.answer.length - 1].appendChild(trueAnswer);
 
         this.createMistakeElement("Write",this.correctAnswer[this.answer.length - 1],answer);
+        this.statistics[this.statistics.currentKana].mistakes++;
       }
     }
 
@@ -980,6 +1030,13 @@ class Exercise {
     }
     var key = ["kanji","meaning","romaji"]; //object properties that correspond to each type
     option = key[option[randNum(option.length - 1)]];
+    if (option == "romaji") {
+    this.statistics.kanji.option.reading.total++;
+    this.statistics.kanji.option.currentType = "reading";
+    } else {
+    this.statistics.kanji.option[option].total++;
+    this.statistics.kanji.option.currentType = option;
+    }
     if (this.options.kanjiRomaji) {
       key[2] = "romaji";
     } else {
@@ -989,9 +1046,14 @@ class Exercise {
     var randIndex = randNum(wordList.length - 1);
     var word = wordListCopy[randIndex];
     wordListCopy.splice(randIndex,1);
+    if (key[prompt] == "katakanaReading") {
+      this.statistics.kanji.prompt.reading.total++;
+      this.statistics.kanji.prompt.currentType = "reading";
+    } else {
+      this.statistics.kanji.prompt[key[prompt]].total++;
+      this.statistics.kanji.prompt.currentType = key[prompt];
+    }
     prompt = word[key[prompt]];
-    this.statistics.kanji[prompt]++;
-    this.statistics.kanji.currentType = prompt;
     this.correctAnswer = word[option];
 
     var instruction = {
@@ -1027,6 +1089,7 @@ class Exercise {
     }
 
     document.getElementById("kanjiPrompt").innerHTML = prompt;
+    this.prompt = prompt;
   }
   //kanjiValidate() is similar to rapidValidate() but validates kanji answers instead instead
   static kanjiValidate(answer) {
@@ -1037,8 +1100,9 @@ class Exercise {
     } else {
       clearTimeout(this.timeout);
       document.getElementById("problemParent").style.backgroundColor = "rgba(255,60,60,0.3)";
-      this.createMistakeElement(this.currentProblem,this.correctAnswer,answer);
-      this.statistics.kanji[this.statistics.kanji.currentType]++;
+      this.createMistakeElement("Kanji",this.correctAnswer,answer);
+      this.statistics.kanji.prompt[this.statistics.kanji.prompt.currentType].mistakes++;
+      this.statistics.kanji.option[this.statistics.kanji.option.currentType].mistakes++;
       this.randomProblem();
     }
     this.timeout = setTimeout(function(){
@@ -1050,11 +1114,14 @@ class Exercise {
     var row = document.createElement("tr");
     var typeElement = document.createElement("td");
     typeElement .innerHTML= type;
+    var promptElement = document.createElement("td");
+    promptElement.innerHTML = this.prompt;
     var correctElement = document.createElement("td");
     correctElement.innerHTML = correct;
     var answerElement = document.createElement("td");
     answerElement.innerHTML = answer;
     row.appendChild(typeElement);
+    row.appendChild(promptElement);
     row.appendChild(correctElement);
     row.appendChild(answerElement);
     document.getElementById("problemMistakes").appendChild(row);
@@ -1069,4 +1136,143 @@ class Exercise {
       this.options.exerciseLength = -1;
     }
   }
+  //analyzeStatistics() looks at Exercise.statistics and displays various things depending on the values. Linked heavily with #scoresParent
+  static analyzeStatistics() {
+    console.log(this.statistics);
+    var kanaTotal = [0,0];
+    var typeTotal = [0,0,0];
+    var typeMistakes = [0,0,0];
+    for (var i = 0; i < 2; i++) {
+      var currentKana = ["hiragana","katakana"][i];
+      for (var j = 0; j < 3; j++) {
+        var currentType = ["normal","alternate","compound"][j];
+        this.statistics[currentKana].total += this.statistics[currentKana][currentType].total;
+        this.statistics[currentKana].mistakes += this.statistics[currentKana][currentType].mistakes;
+        typeTotal[j] = this.statistics[currentKana][currentType].total;
+        typeMistakes[j] = this.statistics[currentKana][currentType].mistakes;
+      }
+      kanaTotal[0] += this.statistics[currentKana].total;
+      kanaTotal[1] += this.statistics[currentKana].mistakes;
+    }
+    var kanjiTotal = [0,0];
+    var kanjiTypeTotal = [0,0,0];
+    var kanjiTypeMistakes = [0,0,0];
+    for (var i = 0; i < 2; i++) {
+      var currentFamily = ["option","prompt"][i];
+      for (var j = 0; j < 3; j++) {
+        var currentType = ["kanji","meaning","reading"][j];
+        kanjiTotal[0] += this.statistics.kanji[currentFamily][currentType].total / 2;
+        kanjiTotal[1] += this.statistics.kanji[currentFamily][currentType].mistakes / 2;
+        kanjiTypeTotal[j] = this.statistics.kanji[currentFamily][currentType].total;
+        kanjiTypeMistakes[j] = this.statistics.kanji[currentFamily][currentType].mistakes;
+      }
+    }
+    var totalTotal = [kanaTotal[0] + kanjiTotal[0],kanaTotal[1] + kanjiTotal[1]];
+    document.getElementById("overallScore").innerHTML = (totalTotal[0] - totalTotal[1]) + "/" + totalTotal[0];
+
+    var progressBars = ["overallAccuracy","kanaAccuracy","katakanaAccuracy","hiraganaAccuracy","compoundAccuracy","alternateAccuracy","normalAccuracy","overallKanjiAccuracy","kanjiAccuracy","meaningAccuracy","reasonAccuracy"];
+    var progressBarValues = [
+      (totalTotal[0] - totalTotal[1]) / totalTotal[0],
+      (kanaTotal[0] - kanaTotal[1]) / kanaTotal[0],
+      (this.statistics.katakana.total - this.statistics.katakana.mistakes) / this.statistics.katakana.total,
+      (this.statistics.hiragana.total - this.statistics.hiragana.mistakes) / this.statistics.hiragana.total,
+      (typeTotal[2] - typeMistakes[2]) / typeTotal[2],
+      (typeTotal[1] - typeMistakes[1]) / typeTotal[1],
+      (typeTotal[0] - typeMistakes[0]) / typeTotal[0],
+      (kanjiTotal[0] - kanjiTotal[1]) / kanjiTotal[0],
+      (kanjiTypeTotal[2] - kanjiTypeMistakes[2]) / kanjiTypeTotal[2],
+      (kanjiTypeTotal[1] - kanjiTypeMistakes[1]) / kanjiTypeTotal[1],
+      (kanjiTypeTotal[0] - kanjiTypeMistakes[0]) / kanjiTypeTotal[0]
+    ];
+    for (var i = 0; i < progressBars.length; i++) {
+      this.adjustProgressBar(progressBars[i],progressBarValues[i]);
+    }
+    if (progressBarValues[2] > progressBarValues[3]) {
+      document.getElementById("kanaStrongestKana").style.opacity = 1;
+      document.getElementById("kanaStrongestKana").innerHTML = "Katakana";
+    } else if (progressBarValues[3] > progressBarValues[2]) {
+      document.getElementById("kanaStrongestKana").style.opacity = 1;
+      document.getElementById("kanaStrongestKana").innerHTML = "Hiragana";
+    } else {
+      document.getElementById("kanaStrongestKana").style.opacity = 0.3;
+      document.getElementById("kanaStrongestKana").innerHTML = "";
+    }
+
+    var index = arrayMaxIndex([progressBarValues[4],progressBarValues[5],progressBarValues[6]]);
+    var text = "";
+    var key = ["Compound","Alternate","Normal"]
+    for (var i = 0; i < 3; i++) {
+      if (!index.isArray) {
+        text = key[index.index];
+      } else {
+        text += key[index.index[0]] + "/";
+        index.index.shift();
+        if (index.index.length == 0) {
+          break;
+        }
+      }
+    }
+    if (index.isArray) {
+      text = text.substring(0,text.length - 1);
+    }
+    document.getElementById("kanaStrongestExercise").innerHTML = text;
+
+    var gradeMaxes = [59,62,67,69,72,77,79,82,87,88,92,99,100];
+    var key = ["F","D-","D","D+","C-","C","C+","B-","B","B+","A-","A","A+"];
+    var note = [
+      "Wow.",
+      "Practice!",
+      "Improve!",
+      "More!",
+      "Good!",
+      "Keep going!",
+      "Better!",
+      "Wow!",
+      "Impressive!",
+      "Great job!",
+      "Insane!",
+      "...woah",
+      "p e r f e c t",
+    ]
+    for (var i = 0; i < gradeMaxes.length; i++) {
+      if (progressBarValues[0] * 100 <= gradeMaxes[i]) {
+        document.getElementById("scoreGrade").innerHTML = key[i];
+        document.getElementById("scoreComment").innerHTML = note[i];
+        break;
+      }
+    }
+    //to finish: kanji analysis, changing color of progress bar depending on score
+  }
+  //adjustProgressBar() adjusts a progressBar element given a value
+  static adjustProgressBar(id,percentage) {
+    var progressBar = document.getElementById(id);
+    if (!isNaN(percentage)) {
+      progressBar.style.opacity = 1;
+      progressBar.children[0].style.width = Math.round(percentage * 100) + "%";
+      progressBar.children[1].innerHTML = Math.round(percentage * 100) + "%";
+    } else {
+      progressBar.style.opacity = 0.3;
+    }
+  }
+}
+function arrayMaxIndex(array) {
+  var max = array[0];
+  var index = 0;
+  var isArray = false;
+  for (var i = 1; i < array.length; i++) {
+    if (array[i] > max || array[i] > max[0]) {
+      isArray = false;
+      max = array[i];
+      index = i;
+    } else if (array[i] == max) {
+      isArray = true;
+      max = [max,array[i]];
+      index = [index,i];
+    } else if (array[i] == max[0]) {
+      isArray = true;
+      max.push(array[i]);
+      index.push(i);
+    }
+  }
+  return {index:index,isArray:isArray};
 }
