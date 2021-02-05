@@ -455,14 +455,6 @@ body #writeProblem .currentWord {
   font-size:10px;
   margin-top:0.5px;
 }
-.box {
-  border-radius:20px;
-  background-color:rgb(255,255,255);
-  box-shadow:2px 4px 10px rgb(220,220,220);
-  margin:0px 10px 10px 10px;
-  display:block;
-  padding:0px 40px;
-}
 .invertedBox {
   border-radius:20px;
   background-color:rgb(245,245,245);
