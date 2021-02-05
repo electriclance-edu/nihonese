@@ -435,7 +435,7 @@ body #writeProblem .currentWord {
   background-color:rgb(230,230,230);
   border-radius:10px;
   margin-left:10px;
-  border-radius:0;
+  border-radius:20px;
 }
 .progressBar > div {
   width:0%;

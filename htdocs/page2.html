@@ -259,7 +259,7 @@
     <div class="scoresParent" id="scoresParent">
       <div class="overallScore">
           <div class="leftSide">
-            <div class="circleBorder">
+            <div class="circleBorder" id="circleBorder">
               <h1 id="scoreGrade">A+</h1>
             </div>
             <h2 id="overallScore">17/385</h2>
@@ -281,8 +281,8 @@
                 <p>Hiragana Accuracy: </p> <div class="progressBar" id="hiraganaAccuracy"><div></div><span>0%</span></div>
               </div> <br>
               <div class="invertedBox">
-                <p>Strongest Kana: <span id="kanaStrongestKana">Katakana</span></p> <br>
-                <p>Strongest Character Type: <span id="kanaStrongestExercise">Rapid</span></p>
+                <p id="kanaStrongestKanaTitle">Strongest Kana: <span id="kanaStrongestKana"></span></p> <br>
+                <p id="kanaStrongestCharacterTitle">Strongest Character Type: <span id="kanaStrongestCharacter"></span></p>
                 <br>
               </div>
             </div>
@@ -307,18 +307,14 @@
                 <p>Overall Accuracy: </p> <div class="progressBar" id="overallKanjiAccuracy"><div></div><span>0%</span></div> <br>
               </div> <br>
               <div class="invertedBox">
-                <p id="kanjiStrongestPrompt">Strongest Property (prompt): <span>Meaning</span></p> <br>
-                <p id="kanjiStrongestOption">Strongest Property (option): <span>Meaning</span></p> <br>
-              </div> <br>
-              <div class="invertedBox">
-                <p id="kanjiWeakestPrompt">Weakest Property (prompt): <span>Meaning</span></p> <br>
-                <p id="kanjiWeakestOption">Weakest Property (option): <span>Meaning</span></p> <br>
+                <p>Strongest Property (prompt): <span id="kanjiStrongestPrompt">Meaning</span></p> <br>
+                <p>Strongest Property (option): <span id="kanjiStrongestOption">Meaning</span></p> <br>
               </div> <br>
               <h2>Property Accuracy</h2>
               <div class="invertedBox">
                 <p>Symbol: </p> <div class="progressBar" id="kanjiAccuracy"><div></div><span>0%</span></div> <br>
                 <p>Meaning: </p> <div class="progressBar" id="meaningAccuracy"><div></div><span>0%</span></div> <br>
-                <p>Reason: </p> <div class="progressBar" id="reasonAccuracy"><div></div><span>0%</span></div> <br>
+                <p>Reading: </p> <div class="progressBar" id="readingAccuracy"><div></div><span>0%</span></div> <br>
               </div>
             </div>
           </div>

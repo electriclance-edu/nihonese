@@ -1137,7 +1137,30 @@ class Exercise {
     }
   }
   //analyzeStatistics() looks at Exercise.statistics and displays various things depending on the values. Linked heavily with #scoresParent
+  //analyzeStatistics() has a function called convertToText() which, given a list of indexes and an equivalent in text, condenses them all into a single string
   static analyzeStatistics() {
+    var convertToText = function(index,key) {
+      var text = "";
+      for (var i = 0; i < 3; i++) {
+        if (!index.isArray) {
+          text = key[index.index];
+        } else {
+          text += key[index.index[0]] + "/";
+          index.index.shift();
+          if (index.index.length == 0) {
+            break;
+          }
+        }
+      }
+      if (index.isArray) {
+        text = text.substring(0,text.length - 1);
+      }
+      return text;
+    }
+    var calcPercentage = function(object) {
+      return (object.total - object.mistakes) / object.total;
+    }
+
     console.log(this.statistics);
     var kanaTotal = [0,0];
     var typeTotal = [0,0,0];
@@ -1157,20 +1180,21 @@ class Exercise {
     var kanjiTotal = [0,0];
     var kanjiTypeTotal = [0,0,0];
     var kanjiTypeMistakes = [0,0,0];
+
     for (var i = 0; i < 2; i++) {
       var currentFamily = ["option","prompt"][i];
       for (var j = 0; j < 3; j++) {
         var currentType = ["kanji","meaning","reading"][j];
         kanjiTotal[0] += this.statistics.kanji[currentFamily][currentType].total / 2;
         kanjiTotal[1] += this.statistics.kanji[currentFamily][currentType].mistakes / 2;
-        kanjiTypeTotal[j] = this.statistics.kanji[currentFamily][currentType].total;
-        kanjiTypeMistakes[j] = this.statistics.kanji[currentFamily][currentType].mistakes;
+        kanjiTypeTotal[j] += this.statistics.kanji[currentFamily][currentType].total;
+        kanjiTypeMistakes[j] += this.statistics.kanji[currentFamily][currentType].mistakes;
       }
     }
     var totalTotal = [kanaTotal[0] + kanjiTotal[0],kanaTotal[1] + kanjiTotal[1]];
     document.getElementById("overallScore").innerHTML = (totalTotal[0] - totalTotal[1]) + "/" + totalTotal[0];
 
-    var progressBars = ["overallAccuracy","kanaAccuracy","katakanaAccuracy","hiraganaAccuracy","compoundAccuracy","alternateAccuracy","normalAccuracy","overallKanjiAccuracy","kanjiAccuracy","meaningAccuracy","reasonAccuracy"];
+    var progressBars = ["overallAccuracy","kanaAccuracy","katakanaAccuracy","hiraganaAccuracy","compoundAccuracy","alternateAccuracy","normalAccuracy","overallKanjiAccuracy","kanjiAccuracy","meaningAccuracy","readingAccuracy"];
     var progressBarValues = [
       (totalTotal[0] - totalTotal[1]) / totalTotal[0],
       (kanaTotal[0] - kanaTotal[1]) / kanaTotal[0],
@@ -1180,42 +1204,52 @@ class Exercise {
       (typeTotal[1] - typeMistakes[1]) / typeTotal[1],
       (typeTotal[0] - typeMistakes[0]) / typeTotal[0],
       (kanjiTotal[0] - kanjiTotal[1]) / kanjiTotal[0],
-      (kanjiTypeTotal[2] - kanjiTypeMistakes[2]) / kanjiTypeTotal[2],
+      (kanjiTypeTotal[0] - kanjiTypeMistakes[0]) / kanjiTypeTotal[0],
       (kanjiTypeTotal[1] - kanjiTypeMistakes[1]) / kanjiTypeTotal[1],
-      (kanjiTypeTotal[0] - kanjiTypeMistakes[0]) / kanjiTypeTotal[0]
+      (kanjiTypeTotal[2] - kanjiTypeMistakes[2]) / kanjiTypeTotal[2]
     ];
     for (var i = 0; i < progressBars.length; i++) {
       this.adjustProgressBar(progressBars[i],progressBarValues[i]);
     }
-    if (progressBarValues[2] > progressBarValues[3]) {
-      document.getElementById("kanaStrongestKana").style.opacity = 1;
-      document.getElementById("kanaStrongestKana").innerHTML = "Katakana";
-    } else if (progressBarValues[3] > progressBarValues[2]) {
-      document.getElementById("kanaStrongestKana").style.opacity = 1;
-      document.getElementById("kanaStrongestKana").innerHTML = "Hiragana";
+    if (!isNaN(progressBarValues[2]) || !isNaN(progressBarValues[3])) {
+      if (progressBarValues[2] > progressBarValues[3]) {
+        document.getElementById("kanaStrongestKanaTitle").style.opacity = 1;
+        document.getElementById("kanaStrongestKana").style.opacity = 1;
+        document.getElementById("kanaStrongestKana").innerHTML = "Katakana";
+      } else if (progressBarValues[3] > progressBarValues[2]) {
+        document.getElementById("kanaStrongestKanaTitle").style.opacity = 1;
+        document.getElementById("kanaStrongestKana").style.opacity = 1;
+        document.getElementById("kanaStrongestKana").innerHTML = "Hiragana";
+      } else {
+        document.getElementById("kanaStrongestKanaTitle").style.opacity = 0.3;
+        document.getElementById("kanaStrongestKana").innerHTML = "";
+      }
     } else {
-      document.getElementById("kanaStrongestKana").style.opacity = 0.3;
+      document.getElementById("kanaStrongestKanaTitle").style.opacity = 0.3;
       document.getElementById("kanaStrongestKana").innerHTML = "";
     }
+    if (!isNaN(progressBarValues[4]) && !isNaN(progressBarValues[5]) && !isNaN(progressBarValues[6])) {
+      document.getElementById("kanaStrongestCharacterTitle").style.opacity = 1;
+      document.getElementById("kanaStrongestCharacter").innerHTML = convertToText(arrayMaxIndex([progressBarValues[4],progressBarValues[5],progressBarValues[6]]),["Compound","Alternate","Normal"]);
+    } else {
+      document.getElementById("kanaStrongestCharacterTitle").style.opacity = 0.3;
+      document.getElementById("kanaStrongestCharacter").innerHTML = "";
+    }
+    this.adjustProgressBar("overallKanjiAccuracy",progressBarValues[7]);
+    this.adjustProgressBar("kanjiAccuracy",progressBarValues[8]);
+    this.adjustProgressBar("meaningAccuracy",progressBarValues[9]);
+    this.adjustProgressBar("readingAccuracy",progressBarValues[10]);
 
-    var index = arrayMaxIndex([progressBarValues[4],progressBarValues[5],progressBarValues[6]]);
-    var text = "";
-    var key = ["Compound","Alternate","Normal"]
-    for (var i = 0; i < 3; i++) {
-      if (!index.isArray) {
-        text = key[index.index];
-      } else {
-        text += key[index.index[0]] + "/";
-        index.index.shift();
-        if (index.index.length == 0) {
-          break;
-        }
-      }
-    }
-    if (index.isArray) {
-      text = text.substring(0,text.length - 1);
-    }
-    document.getElementById("kanaStrongestExercise").innerHTML = text;
+    document.getElementById("kanjiStrongestPrompt").innerHTML = convertToText(arrayMaxIndex([
+      calcPercentage(this.statistics.kanji.prompt.kanji),
+      calcPercentage(this.statistics.kanji.prompt.meaning),
+      calcPercentage(this.statistics.kanji.prompt.reading)
+    ]),["Symbol","Meaning","Reading"]);
+    document.getElementById("kanjiStrongestOption").innerHTML = convertToText(arrayMaxIndex([
+      calcPercentage(this.statistics.kanji.option.kanji),
+      calcPercentage(this.statistics.kanji.option.meaning),
+      calcPercentage(this.statistics.kanji.option.reading)
+    ]),["Symbol","Meaning","Reading"]);
 
     var gradeMaxes = [59,62,67,69,72,77,79,82,87,88,92,99,100];
     var key = ["F","D-","D","D+","C-","C","C+","B-","B","B+","A-","A","A+"];
@@ -1241,20 +1275,44 @@ class Exercise {
         break;
       }
     }
+    var color = ["rgb(255,35,115)","rgb(250,215,65)","rgb(15,185,200)","rgb(65,185,85)"];
+    var ranges = [25,50,75,101];
+    for (var i = 0; i < color.length; i++) {
+      if (progressBarValues[0] * 100 < ranges[i]) {
+        document.getElementById("circleBorder").style.borderColor = color[i];
+        break;
+      }
+    }
+
     //to finish: kanji analysis, changing color of progress bar depending on score
+
   }
   //adjustProgressBar() adjusts a progressBar element given a value
   static adjustProgressBar(id,percentage) {
+    percentage = Math.round(percentage * 100);
+
+    var color = ["rgb(255,35,115)","rgb(250,215,65)","rgb(15,185,200)","rgb(65,185,85)"];
+    var ranges = [25,50,75,101];
+    for (var i = 0; i < color.length; i++) {
+      if (percentage < ranges[i]) {
+        color = color[i];
+        break;
+      }
+    }
+
     var progressBar = document.getElementById(id);
     if (!isNaN(percentage)) {
       progressBar.style.opacity = 1;
-      progressBar.children[0].style.width = Math.round(percentage * 100) + "%";
-      progressBar.children[1].innerHTML = Math.round(percentage * 100) + "%";
+      progressBar.children[0].style.width = percentage + "%";
+      progressBar.children[0].style.backgroundColor = color;
+      progressBar.children[1].innerHTML = percentage + "%";
     } else {
+      progressBar.children[0].style.backgroundColor = "rgb(230,230,230)";
       progressBar.style.opacity = 0.3;
     }
   }
 }
+//arrayMaxIndex() gives the index/es of the maximum values in an array
 function arrayMaxIndex(array) {
   var max = array[0];
   var index = 0;
