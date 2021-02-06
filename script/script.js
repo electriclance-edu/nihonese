@@ -1161,7 +1161,6 @@ class Exercise {
       return (object.total - object.mistakes) / object.total;
     }
 
-    console.log(this.statistics);
     var kanaTotal = [0,0];
     var typeTotal = [0,0,0];
     var typeMistakes = [0,0,0];
